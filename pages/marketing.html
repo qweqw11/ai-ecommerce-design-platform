@@ -1,0 +1,2018 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI 电商多模态设计平台 - 商用视觉素材生产平台</title>
+  <style>
+    :root {
+      --primary: #2563eb;
+      --primary-dark: #1d4ed8;
+      --purple: #7c3aed;
+      --text-main: #111827;
+      --text-sub: #4b5563;
+      --text-light: #6b7280;
+      --border: #e5e7eb;
+      --bg: #ffffff;
+      --bg-soft: #f8fafc;
+      --bg-blue: #eef4ff;
+      --card: #ffffff;
+      --shadow: 0 18px 45px rgba(15, 23, 42, 0.08);
+      --shadow-hover: 0 24px 60px rgba(37, 99, 235, 0.14);
+      --radius-lg: 28px;
+      --radius-md: 20px;
+      --radius-sm: 14px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC",
+        "Microsoft YaHei", Arial, sans-serif;
+      color: var(--text-main);
+      background: var(--bg);
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+
+    img {
+      width: 100%;
+      display: block;
+      object-fit: cover;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    button {
+      font-family: inherit;
+      border: none;
+      cursor: pointer;
+    }
+
+    .container {
+      width: min(1180px, calc(100% - 48px));
+      margin: 0 auto;
+    }
+
+    .section {
+      padding: 104px 0;
+    }
+
+    .section-soft {
+      background: linear-gradient(180deg, #f8fafc 0%, #ffffff 100%);
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 7px 12px;
+      border: 1px solid rgba(37, 99, 235, 0.18);
+      background: rgba(37, 99, 235, 0.06);
+      color: var(--primary);
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 700;
+      margin-bottom: 16px;
+    }
+
+    .eyebrow::before {
+      content: "";
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--primary), var(--purple));
+    }
+
+    .section-title {
+      font-size: 42px;
+      line-height: 1.18;
+      letter-spacing: -1.4px;
+      margin-bottom: 16px;
+      color: #0f172a;
+    }
+
+    .section-desc {
+      max-width: 720px;
+      font-size: 17px;
+      color: var(--text-sub);
+      margin-bottom: 42px;
+    }
+
+    .center {
+      text-align: center;
+    }
+
+    .center .section-desc {
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      height: 46px;
+      padding: 0 20px;
+      border-radius: 999px;
+      font-size: 15px;
+      font-weight: 700;
+      transition: 0.22s ease;
+      white-space: nowrap;
+    }
+
+    .btn-primary {
+      color: #fff;
+      background: linear-gradient(135deg, var(--primary), var(--purple));
+      box-shadow: 0 14px 30px rgba(37, 99, 235, 0.25);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 18px 38px rgba(37, 99, 235, 0.32);
+    }
+
+    .btn-ghost {
+      color: #0f172a;
+      background: #fff;
+      border: 1px solid var(--border);
+    }
+
+    .btn-ghost:hover {
+      border-color: rgba(37, 99, 235, 0.35);
+      color: var(--primary);
+      transform: translateY(-2px);
+      box-shadow: 0 12px 26px rgba(15, 23, 42, 0.08);
+    }
+
+    .btn:active {
+      transform: scale(0.98);
+    }
+
+    /* Nav */
+    .navbar {
+      position: sticky;
+      top: 0;
+      z-index: 99;
+      backdrop-filter: blur(18px);
+      background: rgba(255, 255, 255, 0.78);
+      border-bottom: 1px solid rgba(229, 231, 235, 0.8);
+      transition: 0.25s ease;
+    }
+
+    .navbar.scrolled {
+      background: rgba(255, 255, 255, 0.94);
+      box-shadow: 0 10px 30px rgba(15, 23, 42, 0.06);
+    }
+
+    .nav-inner {
+      height: 74px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 28px;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 18px;
+      font-weight: 800;
+      color: #0f172a;
+      white-space: nowrap;
+    }
+
+    .logo-mark {
+      width: 38px;
+      height: 38px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, var(--primary), var(--purple));
+      display: grid;
+      place-items: center;
+      color: #fff;
+      font-size: 17px;
+      box-shadow: 0 12px 24px rgba(37, 99, 235, 0.25);
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      font-size: 14px;
+      color: #334155;
+    }
+
+    .nav-links a {
+      position: relative;
+      transition: 0.2s ease;
+    }
+
+    .nav-links a::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      bottom: -8px;
+      width: 0;
+      height: 2px;
+      background: linear-gradient(135deg, var(--primary), var(--purple));
+      border-radius: 999px;
+      transition: 0.22s ease;
+    }
+
+    .nav-links a:hover {
+      color: var(--primary);
+    }
+
+    .nav-links a:hover::after {
+      width: 100%;
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .login {
+      font-size: 14px;
+      font-weight: 700;
+      color: #334155;
+      padding: 9px 12px;
+      border-radius: 999px;
+      transition: 0.2s ease;
+    }
+
+    .login:hover {
+      color: var(--primary);
+      background: rgba(37, 99, 235, 0.06);
+    }
+
+    /* Hero */
+    .hero {
+      position: relative;
+      padding: 86px 0 96px;
+      background:
+        radial-gradient(circle at 14% 18%, rgba(37, 99, 235, 0.13), transparent 32%),
+        radial-gradient(circle at 84% 16%, rgba(124, 58, 237, 0.13), transparent 34%),
+        linear-gradient(180deg, #ffffff 0%, #f8fbff 100%);
+      overflow: hidden;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 0.95fr 1.05fr;
+      align-items: center;
+      gap: 56px;
+    }
+
+    .hero h1 {
+      font-size: 62px;
+      line-height: 1.08;
+      letter-spacing: -2.6px;
+      color: #0f172a;
+      margin-bottom: 24px;
+    }
+
+    .hero h1 span {
+      background: linear-gradient(135deg, var(--primary), var(--purple));
+      -webkit-background-clip: text;
+      color: transparent;
+    }
+
+    .hero p {
+      font-size: 18px;
+      color: var(--text-sub);
+      max-width: 650px;
+      margin-bottom: 32px;
+    }
+
+    .hero-actions {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 34px;
+    }
+
+    .hero-metrics {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+      max-width: 560px;
+    }
+
+    .metric {
+      padding: 18px 16px;
+      border: 1px solid rgba(226, 232, 240, 0.9);
+      background: rgba(255, 255, 255, 0.72);
+      border-radius: 18px;
+      box-shadow: 0 10px 26px rgba(15, 23, 42, 0.05);
+    }
+
+    .metric strong {
+      display: block;
+      font-size: 22px;
+      color: #0f172a;
+      line-height: 1.2;
+    }
+
+    .metric span {
+      display: block;
+      margin-top: 4px;
+      font-size: 13px;
+      color: var(--text-light);
+    }
+
+    .hero-visual {
+      position: relative;
+      min-height: 620px;
+    }
+
+    .dashboard-card {
+      position: absolute;
+      inset: 26px 0 0 38px;
+      background: rgba(255, 255, 255, 0.84);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(226, 232, 240, 0.9);
+      border-radius: 34px;
+      box-shadow: var(--shadow);
+      padding: 22px;
+      overflow: hidden;
+    }
+
+    .dash-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .window-dots {
+      display: flex;
+      gap: 7px;
+    }
+
+    .window-dots i {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      display: block;
+      background: #cbd5e1;
+    }
+
+    .window-dots i:nth-child(1) { background: #f87171; }
+    .window-dots i:nth-child(2) { background: #facc15; }
+    .window-dots i:nth-child(3) { background: #34d399; }
+
+    .dash-badge {
+      font-size: 12px;
+      color: var(--primary);
+      background: rgba(37, 99, 235, 0.08);
+      padding: 6px 10px;
+      border-radius: 999px;
+      font-weight: 800;
+    }
+
+    .hero-image-grid {
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 14px;
+    }
+
+    .hero-main-img,
+    .hero-side-img,
+    .hero-wide-img {
+      border-radius: 24px;
+      overflow: hidden;
+      box-shadow: 0 18px 34px rgba(15, 23, 42, 0.12);
+      border: 1px solid rgba(255, 255, 255, 0.78);
+    }
+
+    .hero-main-img {
+      height: 355px;
+    }
+
+    .hero-side-stack {
+      display: grid;
+      gap: 14px;
+    }
+
+    .hero-side-img {
+      height: 170px;
+    }
+
+    .hero-wide-img {
+      height: 150px;
+      margin-top: 14px;
+    }
+
+    .floating-panel {
+      position: absolute;
+      left: 0;
+      bottom: 34px;
+      width: 300px;
+      padding: 18px;
+      border-radius: 24px;
+      background: rgba(255, 255, 255, 0.92);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(226, 232, 240, 0.9);
+      box-shadow: var(--shadow);
+    }
+
+    .floating-panel h4 {
+      font-size: 15px;
+      margin-bottom: 10px;
+      color: #0f172a;
+    }
+
+    .task-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px;
+      border-radius: 16px;
+      background: #f8fafc;
+      margin-top: 8px;
+      font-size: 13px;
+      color: #475569;
+    }
+
+    .task-icon {
+      width: 28px;
+      height: 28px;
+      display: grid;
+      place-items: center;
+      border-radius: 10px;
+      background: rgba(37, 99, 235, 0.09);
+      color: var(--primary);
+      font-weight: 900;
+      flex-shrink: 0;
+    }
+
+    .assistant-bubble {
+      position: absolute;
+      right: 18px;
+      bottom: 0;
+      width: 258px;
+      padding: 16px;
+      border-radius: 24px;
+      background: linear-gradient(135deg, rgba(37, 99, 235, 0.95), rgba(124, 58, 237, 0.95));
+      color: #fff;
+      box-shadow: 0 24px 54px rgba(37, 99, 235, 0.28);
+    }
+
+    .assistant-bubble strong {
+      display: block;
+      font-size: 15px;
+      margin-bottom: 6px;
+    }
+
+    .assistant-bubble p {
+      margin: 0;
+      color: rgba(255, 255, 255, 0.86);
+      font-size: 13px;
+      line-height: 1.55;
+    }
+
+    /* Cards */
+    .capability-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 22px;
+    }
+
+    .cap-card,
+    .pain-card,
+    .user-card,
+    .price-card,
+    .case-card,
+    .flow-card {
+      border: 1px solid var(--border);
+      background: var(--card);
+      border-radius: var(--radius-md);
+      transition: 0.25s ease;
+      box-shadow: 0 12px 30px rgba(15, 23, 42, 0.04);
+    }
+
+    .cap-card {
+      padding: 22px;
+      min-height: 260px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .cap-card:hover,
+    .pain-card:hover,
+    .user-card:hover,
+    .case-card:hover,
+    .flow-card:hover {
+      transform: translateY(-7px);
+      border-color: rgba(37, 99, 235, 0.28);
+      box-shadow: var(--shadow-hover);
+    }
+
+    .cap-icon {
+      width: 46px;
+      height: 46px;
+      display: grid;
+      place-items: center;
+      border-radius: 16px;
+      background: linear-gradient(135deg, rgba(37, 99, 235, 0.1), rgba(124, 58, 237, 0.1));
+      color: var(--primary);
+      font-size: 22px;
+      margin-bottom: 16px;
+    }
+
+    .cap-card h3 {
+      font-size: 20px;
+      margin-bottom: 8px;
+      color: #0f172a;
+    }
+
+    .cap-card p {
+      font-size: 14px;
+      color: var(--text-sub);
+      margin-bottom: 18px;
+    }
+
+    .cap-img {
+      height: 106px;
+      border-radius: 18px;
+      overflow: hidden;
+      margin-top: 10px;
+    }
+
+    .cap-tag {
+      position: absolute;
+      right: 18px;
+      top: 18px;
+      font-size: 12px;
+      color: #475569;
+      background: #f1f5f9;
+      padding: 4px 9px;
+      border-radius: 999px;
+    }
+
+    /* Pain */
+    .pain-wrap {
+      display: grid;
+      grid-template-columns: 0.85fr 1.15fr;
+      gap: 48px;
+      align-items: center;
+    }
+
+    .pain-image {
+      border-radius: 34px;
+      overflow: hidden;
+      height: 560px;
+      box-shadow: var(--shadow);
+      position: relative;
+    }
+
+    .pain-image::after {
+      content: "从拍摄到上线，素材生产正在被重新组织";
+      position: absolute;
+      left: 22px;
+      right: 22px;
+      bottom: 22px;
+      padding: 16px 18px;
+      border-radius: 20px;
+      background: rgba(255, 255, 255, 0.88);
+      backdrop-filter: blur(16px);
+      color: #0f172a;
+      font-weight: 800;
+      box-shadow: 0 12px 28px rgba(15, 23, 42, 0.12);
+    }
+
+    .pain-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 18px;
+    }
+
+    .pain-card {
+      padding: 22px;
+    }
+
+    .pain-card h3 {
+      font-size: 18px;
+      margin-bottom: 8px;
+    }
+
+    .pain-card p {
+      font-size: 14px;
+      color: var(--text-sub);
+    }
+
+    .pain-num {
+      width: 34px;
+      height: 34px;
+      display: grid;
+      place-items: center;
+      border-radius: 12px;
+      background: rgba(37, 99, 235, 0.08);
+      color: var(--primary);
+      font-weight: 900;
+      margin-bottom: 12px;
+    }
+
+    /* Systems */
+    .system-tabs {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 28px;
+      flex-wrap: wrap;
+    }
+
+    .tab-btn {
+      padding: 11px 17px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: #fff;
+      color: #475569;
+      font-weight: 800;
+      transition: 0.22s ease;
+    }
+
+    .tab-btn.active,
+    .tab-btn:hover {
+      color: #fff;
+      background: linear-gradient(135deg, var(--primary), var(--purple));
+      border-color: transparent;
+      box-shadow: 0 12px 28px rgba(37, 99, 235, 0.22);
+    }
+
+    .system-panel {
+      display: none;
+      grid-template-columns: 0.9fr 1.1fr;
+      gap: 34px;
+      padding: 32px;
+      border-radius: 34px;
+      border: 1px solid var(--border);
+      background: #fff;
+      box-shadow: var(--shadow);
+      align-items: center;
+    }
+
+    .system-panel.active {
+      display: grid;
+    }
+
+    .system-copy h3 {
+      font-size: 32px;
+      line-height: 1.2;
+      margin-bottom: 14px;
+    }
+
+    .system-copy p {
+      color: var(--text-sub);
+      margin-bottom: 22px;
+      font-size: 16px;
+    }
+
+    .value-list {
+      display: grid;
+      gap: 12px;
+    }
+
+    .value-item {
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+      color: #334155;
+      font-size: 15px;
+    }
+
+    .check {
+      width: 22px;
+      height: 22px;
+      display: grid;
+      place-items: center;
+      flex-shrink: 0;
+      border-radius: 50%;
+      background: rgba(37, 99, 235, 0.1);
+      color: var(--primary);
+      font-size: 13px;
+      font-weight: 900;
+      margin-top: 2px;
+    }
+
+    .system-image {
+      height: 440px;
+      border-radius: 28px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .system-image .overlay-card {
+      position: absolute;
+      right: 20px;
+      bottom: 20px;
+      width: 260px;
+      background: rgba(255, 255, 255, 0.9);
+      border: 1px solid rgba(226, 232, 240, 0.9);
+      backdrop-filter: blur(16px);
+      padding: 16px;
+      border-radius: 20px;
+      box-shadow: 0 18px 35px rgba(15, 23, 42, 0.14);
+    }
+
+    .overlay-card strong {
+      display: block;
+      font-size: 14px;
+      margin-bottom: 6px;
+    }
+
+    .overlay-card span {
+      font-size: 13px;
+      color: var(--text-sub);
+    }
+
+    /* Cases */
+    .case-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+
+    .case-card {
+      overflow: hidden;
+      position: relative;
+    }
+
+    .case-main {
+      height: 250px;
+      overflow: hidden;
+    }
+
+    .case-card:hover .case-main img {
+      transform: scale(1.06);
+    }
+
+    .case-main img {
+      height: 100%;
+      transition: 0.45s ease;
+    }
+
+    .case-body {
+      padding: 20px;
+    }
+
+    .case-body h3 {
+      font-size: 20px;
+      margin-bottom: 8px;
+    }
+
+    .case-body p {
+      color: var(--text-sub);
+      font-size: 14px;
+      margin-bottom: 16px;
+    }
+
+    .thumbs {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+    }
+
+    .thumbs img {
+      height: 70px;
+      border-radius: 14px;
+    }
+
+    .case-label {
+      position: absolute;
+      top: 16px;
+      left: 16px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.88);
+      color: #0f172a;
+      font-size: 12px;
+      font-weight: 900;
+      backdrop-filter: blur(12px);
+    }
+
+    /* Flow */
+    .flow-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 16px;
+    }
+
+    .flow-card {
+      padding: 18px;
+      position: relative;
+      min-height: 290px;
+    }
+
+    .flow-no {
+      font-size: 34px;
+      line-height: 1;
+      font-weight: 900;
+      color: rgba(37, 99, 235, 0.18);
+      margin-bottom: 8px;
+    }
+
+    .flow-card h3 {
+      font-size: 17px;
+      margin-bottom: 7px;
+    }
+
+    .flow-card p {
+      color: var(--text-sub);
+      font-size: 13px;
+      margin-bottom: 14px;
+    }
+
+    .flow-card img {
+      height: 116px;
+      border-radius: 18px;
+      margin-top: auto;
+    }
+
+    /* Users */
+    .user-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+
+    .user-card {
+      padding: 24px;
+    }
+
+    .user-card h3 {
+      font-size: 19px;
+      margin-bottom: 10px;
+    }
+
+    .user-card p {
+      font-size: 14px;
+      color: var(--text-sub);
+      margin-bottom: 14px;
+    }
+
+    .user-value {
+      padding: 12px 14px;
+      border-radius: 16px;
+      background: #f8fafc;
+      color: #1e293b;
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    /* Pricing */
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+    }
+
+    .price-card {
+      padding: 28px 24px;
+      position: relative;
+    }
+
+    .price-card:hover {
+      transform: translateY(-8px);
+      box-shadow: var(--shadow-hover);
+      border-color: rgba(37, 99, 235, 0.28);
+    }
+
+    .price-card.featured {
+      border-color: rgba(37, 99, 235, 0.55);
+      box-shadow: 0 24px 60px rgba(37, 99, 235, 0.16);
+    }
+
+    .recommend {
+      position: absolute;
+      top: -13px;
+      right: 20px;
+      padding: 5px 10px;
+      border-radius: 999px;
+      background: linear-gradient(135deg, var(--primary), var(--purple));
+      color: #fff;
+      font-size: 12px;
+      font-weight: 900;
+    }
+
+    .price-card h3 {
+      font-size: 22px;
+      margin-bottom: 8px;
+    }
+
+    .price {
+      font-size: 34px;
+      font-weight: 900;
+      margin: 18px 0 6px;
+      color: #0f172a;
+    }
+
+    .price span {
+      font-size: 14px;
+      color: var(--text-light);
+      font-weight: 600;
+    }
+
+    .fit {
+      color: var(--text-sub);
+      font-size: 14px;
+      margin-bottom: 20px;
+    }
+
+    .features {
+      list-style: none;
+      display: grid;
+      gap: 10px;
+      margin-bottom: 24px;
+      font-size: 14px;
+      color: #334155;
+    }
+
+    .features li::before {
+      content: "✓";
+      color: var(--primary);
+      font-weight: 900;
+      margin-right: 8px;
+    }
+
+    .price-card .btn {
+      width: 100%;
+    }
+
+    /* FAQ */
+    .faq-wrap {
+      max-width: 880px;
+      margin: 0 auto;
+      display: grid;
+      gap: 14px;
+    }
+
+    .faq-item {
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      background: #fff;
+      overflow: hidden;
+      box-shadow: 0 10px 26px rgba(15, 23, 42, 0.04);
+    }
+
+    .faq-q {
+      width: 100%;
+      padding: 20px 22px;
+      background: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      text-align: left;
+      font-size: 16px;
+      font-weight: 800;
+      color: #0f172a;
+    }
+
+    .faq-q span {
+      width: 26px;
+      height: 26px;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      background: #f1f5f9;
+      color: var(--primary);
+      transition: 0.2s ease;
+      flex-shrink: 0;
+    }
+
+    .faq-a {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.28s ease;
+    }
+
+    .faq-a p {
+      padding: 0 22px 20px;
+      color: var(--text-sub);
+      font-size: 15px;
+    }
+
+    .faq-item.open .faq-a {
+      max-height: 180px;
+    }
+
+    .faq-item.open .faq-q span {
+      transform: rotate(45deg);
+      background: rgba(37, 99, 235, 0.1);
+    }
+
+    /* CTA */
+    .bottom-cta {
+      border-radius: 38px;
+      padding: 56px;
+      background:
+        linear-gradient(135deg, rgba(37, 99, 235, 0.95), rgba(124, 58, 237, 0.95)),
+        url("https://images.unsplash.com/photo-1556742502-ec7c0e9f34b1?auto=format&fit=crop&w=1600&q=80");
+      background-size: cover;
+      background-position: center;
+      color: #fff;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      align-items: center;
+      gap: 30px;
+      box-shadow: 0 28px 70px rgba(37, 99, 235, 0.25);
+    }
+
+    .bottom-cta h2 {
+      font-size: 34px;
+      line-height: 1.2;
+      margin-bottom: 12px;
+    }
+
+    .bottom-cta p {
+      color: rgba(255, 255, 255, 0.86);
+      max-width: 680px;
+    }
+
+    .bottom-cta .btn {
+      background: #fff;
+      color: var(--primary);
+    }
+
+    /* Footer */
+    .footer {
+      padding: 64px 0 34px;
+      background: #0f172a;
+      color: #cbd5e1;
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 1.4fr repeat(4, 1fr);
+      gap: 34px;
+      padding-bottom: 42px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .footer h4 {
+      color: #fff;
+      margin-bottom: 14px;
+      font-size: 15px;
+    }
+
+    .footer p,
+    .footer a {
+      color: #94a3b8;
+      font-size: 14px;
+    }
+
+    .footer a {
+      display: block;
+      margin-top: 9px;
+      transition: 0.2s ease;
+    }
+
+    .footer a:hover {
+      color: #fff;
+    }
+
+    .footer-logo {
+      color: #fff;
+      font-size: 20px;
+      font-weight: 900;
+      margin-bottom: 14px;
+    }
+
+    .copyright {
+      padding-top: 24px;
+      color: #64748b;
+      font-size: 13px;
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    /* Toast */
+    .toast {
+      position: fixed;
+      right: 28px;
+      bottom: 28px;
+      z-index: 200;
+      min-width: 280px;
+      padding: 15px 18px;
+      border-radius: 18px;
+      background: #0f172a;
+      color: #fff;
+      box-shadow: 0 20px 48px rgba(15, 23, 42, 0.24);
+      transform: translateY(24px);
+      opacity: 0;
+      pointer-events: none;
+      transition: 0.25s ease;
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .toast.show {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    @media (max-width: 1180px) {
+      .hero-grid,
+      .pain-wrap,
+      .system-panel {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-visual {
+        min-height: 620px;
+      }
+
+      .capability-grid,
+      .case-grid,
+      .user-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .pricing-grid,
+      .flow-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .nav-links {
+        display: none;
+      }
+    }
+
+    @media (max-width: 760px) {
+      .container {
+        width: min(100% - 28px, 1180px);
+      }
+
+      .hero h1 {
+        font-size: 42px;
+      }
+
+      .section-title {
+        font-size: 32px;
+      }
+
+      .hero-actions,
+      .nav-actions,
+      .bottom-cta,
+      .copyright {
+        align-items: stretch;
+        flex-direction: column;
+      }
+
+      .hero-actions {
+        display: grid;
+      }
+
+      .hero-metrics,
+      .capability-grid,
+      .pain-grid,
+      .case-grid,
+      .flow-grid,
+      .user-grid,
+      .pricing-grid,
+      .footer-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-visual {
+        min-height: 740px;
+      }
+
+      .dashboard-card {
+        inset: 0;
+      }
+
+      .floating-panel,
+      .assistant-bubble {
+        position: relative;
+        width: 100%;
+        left: auto;
+        right: auto;
+        bottom: auto;
+        margin-top: 16px;
+      }
+
+      .hero-image-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-main-img,
+      .hero-side-img,
+      .hero-wide-img {
+        height: 190px;
+      }
+
+      .bottom-cta {
+        padding: 34px;
+        grid-template-columns: 1fr;
+      }
+    }
+</style>
+  <link rel="stylesheet" href="../assets/css/common.css" />
+</head>
+
+<body>
+  <header class="navbar" id="navbar">
+    <div class="container nav-inner">
+      <a href="#top" class="logo">
+        <span class="logo-mark">AI</span>
+        <span>AI 电商多模态设计平台</span>
+      </a>
+
+      <nav class="nav-links">
+        <a href="#capabilities">产品能力</a>
+        <a href="#systems">场景方案</a>
+        <a href="#cases">案例展示</a>
+        <a href="#lora">LoRA 资产</a>
+        <a href="#pricing">价格方案</a>
+      </nav>
+
+      <div class="nav-actions">
+        <a class="login" href="javascript:void(0)" data-toast="登录入口已为原型演示保留">登录</a>
+        <button class="btn btn-primary js-start">免费开始</button>
+      </div>
+    </div>
+  </header>
+
+  <main id="top">
+    <section class="hero">
+      <div class="container hero-grid">
+        <div class="hero-copy">
+          <div class="eyebrow">面向电商商用素材生产的 AI 平台</div>
+          <h1>让每一件商品都拥有<span>无限可能</span>的视觉素材</h1>
+          <p>
+            从商品图、场景图到营销海报，平台将复杂 AI 能力转化为可直接使用的电商任务流程，
+            帮助商家快速完成上新、换背景、白底图、平铺图、素材优化与品牌资产沉淀。
+          </p>
+
+          <div class="hero-actions">
+            <button class="btn btn-primary js-start">免费开始生成</button>
+            <a href="#cases" class="btn btn-ghost">查看案例</a>
+          </div>
+
+          <div class="hero-metrics">
+            <div class="metric">
+              <strong>4 张</strong>
+              <span>单次任务快速出图</span>
+            </div>
+            <div class="metric">
+              <strong>9 类</strong>
+              <span>高频电商视觉能力</span>
+            </div>
+            <div class="metric">
+              <strong>API</strong>
+              <span>支持系统级接入</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="hero-visual">
+          <div class="dashboard-card">
+            <div class="dash-top">
+              <div class="window-dots"><i></i><i></i><i></i></div>
+              <div class="dash-badge">AI 商用素材工作台</div>
+            </div>
+
+            <div class="hero-image-grid">
+              <div class="hero-main-img">
+                <img src="https://images.unsplash.com/photo-1596462502278-27bfdc403348?auto=format&fit=crop&w=900&q=85" alt="美妆商品视觉素材" />
+              </div>
+              <div class="hero-side-stack">
+                <div class="hero-side-img">
+                  <img src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=700&q=85" alt="电商商品图" />
+                </div>
+                <div class="hero-side-img">
+                  <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=700&q=85" alt="鞋类商品场景图" />
+                </div>
+              </div>
+            </div>
+
+            <div class="hero-wide-img">
+              <img src="https://images.unsplash.com/photo-1556228720-195a672e8a03?auto=format&fit=crop&w=1200&q=85" alt="护肤品场景陈列" />
+            </div>
+          </div>
+
+          <div class="floating-panel">
+            <h4>高频任务直接选择</h4>
+            <div class="task-row"><span class="task-icon">01</span>上传商品图，自动识别主体边缘</div>
+            <div class="task-row"><span class="task-icon">02</span>选择白底图、换背景或营销图模板</div>
+            <div class="task-row"><span class="task-icon">03</span>生成结果进入素材库长期复用</div>
+          </div>
+
+          <div class="assistant-bubble">
+            <strong>智能助手轻处理</strong>
+            <p>支持抠图、裁切、背景微调、结果优化与任务前后图片预处理，不是普通客服。</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="capabilities">
+      <div class="container">
+        <div class="center">
+          <div class="eyebrow">平台核心能力</div>
+          <h2 class="section-title">把复杂 AI 能力封装成电商可用的生产任务</h2>
+          <p class="section-desc">
+            用户无需理解模型参数，只需要围绕商品、场景、营销目标选择任务，即可完成可商用素材生产。
+          </p>
+        </div>
+
+        <div class="capability-grid">
+          <article class="cap-card">
+            <span class="cap-tag">Task</span>
+            <div class="cap-icon">✦</div>
+            <h3>场景化任务</h3>
+            <p>将换背景、主图、海报、平铺图等流程产品化，降低 AI 使用门槛。</p>
+            <div class="cap-img"><img src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=700&q=80" alt="场景化任务视觉" /></div>
+          </article>
+
+          <article class="cap-card">
+            <span class="cap-tag">Product</span>
+            <div class="cap-icon">◈</div>
+            <h3>商品图生成</h3>
+            <p>围绕商品主体生成适合主图、详情页、活动页使用的标准化视觉素材。</p>
+            <div class="cap-img"><img src="https://images.unsplash.com/photo-1585386959984-a4155224a1ad?auto=format&fit=crop&w=700&q=80" alt="商品图生成" /></div>
+          </article>
+
+          <article class="cap-card">
+            <span class="cap-tag">Scene</span>
+            <div class="cap-icon">◎</div>
+            <h3>场景图生成</h3>
+            <p>根据类目与卖点生成真实生活场景，提升商品表达和内容转化力。</p>
+            <div class="cap-img"><img src="https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?auto=format&fit=crop&w=700&q=80" alt="家居场景图" /></div>
+          </article>
+
+          <article class="cap-card">
+            <span class="cap-tag">Bg</span>
+            <div class="cap-icon">▣</div>
+            <h3>一键换背景</h3>
+            <p>保留商品主体质感，快速适配节日、促销、品牌和多平台投放场景。</p>
+            <div class="cap-img"><img src="https://images.unsplash.com/photo-1512436991641-6745cdb1723f?auto=format&fit=crop&w=700&q=80" alt="服饰背景生成" /></div>
+          </article>
+
+          <article class="cap-card">
+            <span class="cap-tag">Clean</span>
+            <div class="cap-icon">□</div>
+            <h3>白底图 / 转平铺</h3>
+            <p>面向商品上架、平台审核和多 SKU 陈列，快速生成清晰规范的素材。</p>
+            <div class="cap-img"><img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=700&q=80" alt="数码商品白底图" /></div>
+          </article>
+
+          <article class="cap-card">
+            <span class="cap-tag">Poster</span>
+            <div class="cap-icon">▧</div>
+            <h3>营销图生成</h3>
+            <p>结合商品、卖点与活动主题，生成适合电商投放的营销视觉草案。</p>
+            <div class="cap-img"><img src="https://images.unsplash.com/photo-1607083206869-4c7672e72a8a?auto=format&fit=crop&w=700&q=80" alt="营销活动素材" /></div>
+          </article>
+
+          <article class="cap-card">
+            <span class="cap-tag">Assistant</span>
+            <div class="cap-icon">⌁</div>
+            <h3>智能助手</h3>
+            <p>作为悬浮轻处理入口，完成图片预处理、局部修改、结果优化和任务建议。</p>
+            <div class="cap-img"><img src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=700&q=80" alt="智能助手工作流" /></div>
+          </article>
+
+          <article class="cap-card" id="lora">
+            <span class="cap-tag">LoRA</span>
+            <div class="cap-icon">◇</div>
+            <h3>LoRA 训练与资产化</h3>
+            <p>沉淀固定商品、模特和品牌风格，支撑长期一致性的视觉生产。</p>
+            <div class="cap-img"><img src="https://images.unsplash.com/photo-1556761175-b413da4baf72?auto=format&fit=crop&w=700&q=80" alt="视觉资产管理" /></div>
+          </article>
+
+          <article class="cap-card">
+            <span class="cap-tag">API</span>
+            <div class="cap-icon">⌘</div>
+            <h3>API 接入</h3>
+            <p>为企业客户、ERP、商品管理系统和批量生产流程提供接口化能力。</p>
+            <div class="cap-img"><img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=700&q=80" alt="API 数据控制台" /></div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section-soft" id="pain">
+      <div class="container pain-wrap">
+        <div>
+          <div class="eyebrow">行业痛点</div>
+          <h2 class="section-title">电商素材生产不缺工具，缺的是稳定、低门槛、可复用的生产系统</h2>
+          <p class="section-desc">
+            从上新节奏到多平台投放，商家需要的不只是生成一张图，而是一套能够持续交付商品视觉资产的流程。
+          </p>
+
+          <div class="pain-grid">
+            <div class="pain-card">
+              <div class="pain-num">01</div>
+              <h3>拍摄成本高</h3>
+              <p>小批量、多 SKU 商品难以频繁组织摄影棚、模特和场景搭建。</p>
+            </div>
+            <div class="pain-card">
+              <div class="pain-num">02</div>
+              <h3>修图周期长</h3>
+              <p>抠图、精修、换背景和海报延展依赖人工，交付周期不可控。</p>
+            </div>
+            <div class="pain-card">
+              <div class="pain-num">03</div>
+              <h3>结果不稳定</h3>
+              <p>传统 AI 工具容易主体跑偏、商品变形，难以满足商用要求。</p>
+            </div>
+            <div class="pain-card">
+              <div class="pain-num">04</div>
+              <h3>资产难沉淀</h3>
+              <p>图片做完即用即丢，模特、商品和品牌风格缺少长期复用机制。</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="pain-image">
+          <img src="https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?auto=format&fit=crop&w=1100&q=85" alt="电商团队素材生产场景" />
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="systems">
+      <div class="container">
+        <div class="center">
+          <div class="eyebrow">三大核心能力体系</div>
+          <h2 class="section-title">覆盖从低门槛生成到长期资产沉淀的完整链路</h2>
+          <p class="section-desc">
+            平台不是单点工具，而是围绕电商视觉生产建立任务、助手、资产三层能力。
+          </p>
+        </div>
+
+        <div class="system-tabs">
+          <button class="tab-btn active" data-tab="task">场景化任务</button>
+          <button class="tab-btn" data-tab="assistant">智能助手</button>
+          <button class="tab-btn" data-tab="asset">LoRA 训练与资产化</button>
+        </div>
+
+        <div class="system-panel active" data-panel="task">
+          <div class="system-copy">
+            <h3>面向大众商家的标准化任务入口</h3>
+            <p>
+              将商品上新、换背景、白底图、平铺图、营销图等高频需求拆解为清晰任务，
+              用户只需上传商品图、选择目标场景，即可获得多张可选结果。
+            </p>
+            <div class="value-list">
+              <div class="value-item"><span class="check">✓</span>适合非设计背景商家直接使用</div>
+              <div class="value-item"><span class="check">✓</span>减少复杂提示词和模型参数暴露</div>
+              <div class="value-item"><span class="check">✓</span>围绕电商类目和使用目标组织流程</div>
+            </div>
+          </div>
+          <div class="system-image">
+            <img src="https://images.unsplash.com/photo-1556742031-c6961e8560b0?auto=format&fit=crop&w=1100&q=85" alt="场景化任务界面" />
+            <div class="overlay-card">
+              <strong>任务模板驱动</strong>
+              <span>选择商品类目、使用场景和输出比例后，快速批量生成结果。</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="system-panel" data-panel="assistant">
+          <div class="system-copy">
+            <h3>不是客服，而是任务前后的轻处理工作台</h3>
+            <p>
+              智能助手以悬浮入口存在，负责图片预处理、结果微调、生成建议和局部优化，
+              衔接用户在任务前、中、后的高频操作。
+            </p>
+            <div class="value-list">
+              <div class="value-item"><span class="check">✓</span>上传前处理：裁切、抠图、清晰度优化</div>
+              <div class="value-item"><span class="check">✓</span>生成后优化：局部重绘、背景调整、细节修正</div>
+              <div class="value-item"><span class="check">✓</span>根据商品图自动推荐更合适的任务入口</div>
+            </div>
+          </div>
+          <div class="system-image">
+            <img src="https://images.unsplash.com/photo-1515378791036-0648a3ef77b2?auto=format&fit=crop&w=1100&q=85" alt="智能助手图片处理" />
+            <div class="overlay-card">
+              <strong>轻量但高频</strong>
+              <span>帮助用户在不离开当前任务的情况下完成图片优化。</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="system-panel" data-panel="asset">
+          <div class="system-copy">
+            <h3>沉淀固定商品、模特和品牌风格的长期资产</h3>
+            <p>
+              面向高价值用户和团队客户，通过 LoRA 训练形成可复用的视觉资产，
+              保持商品主体、品牌调性和模特形象的一致性。
+            </p>
+            <div class="value-list">
+              <div class="value-item"><span class="check">✓</span>固定商品长期复用，减少重复训练和调试</div>
+              <div class="value-item"><span class="check">✓</span>固定模特或品牌风格，提高系列内容一致性</div>
+              <div class="value-item"><span class="check">✓</span>沉淀企业级素材库，支持团队协同和 API 调用</div>
+            </div>
+          </div>
+          <div class="system-image">
+            <img src="https://images.unsplash.com/photo-1554774853-aae0a22c8aa4?auto=format&fit=crop&w=1100&q=85" alt="品牌资产沉淀" />
+            <div class="overlay-card">
+              <strong>资产化生产</strong>
+              <span>让每一次生成都服务于长期品牌视觉体系。</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section-soft" id="cases">
+      <div class="container">
+        <div class="center">
+          <div class="eyebrow">真实案例展示</div>
+          <h2 class="section-title">覆盖多个电商类目的视觉素材生产场景</h2>
+          <p class="section-desc">
+            适用于美妆护肤、服饰鞋包、家居生活、数码产品、食品饮品等常见电商品类。
+          </p>
+        </div>
+
+        <div class="case-grid">
+          <article class="case-card">
+            <div class="case-label">美妆护肤</div>
+            <div class="case-main">
+              <img src="https://images.unsplash.com/photo-1620916566398-39f1143ab7be?auto=format&fit=crop&w=900&q=85" alt="美妆护肤案例" />
+            </div>
+            <div class="case-body">
+              <h3>护肤品场景图</h3>
+              <p>围绕成分、质感和高端陈列生成适合详情页与活动页的视觉素材。</p>
+              <div class="thumbs">
+                <img src="https://images.unsplash.com/photo-1556229010-6c3f2c9ca5f8?auto=format&fit=crop&w=300&q=80" alt="护肤品缩略图" />
+                <img src="https://images.unsplash.com/photo-1556228720-195a672e8a03?auto=format&fit=crop&w=300&q=80" alt="护肤品缩略图" />
+                <img src="https://images.unsplash.com/photo-1571781926291-c477ebfd024b?auto=format&fit=crop&w=300&q=80" alt="护肤品缩略图" />
+              </div>
+            </div>
+          </article>
+
+          <article class="case-card">
+            <div class="case-label">服饰鞋包</div>
+            <div class="case-main">
+              <img src="https://images.unsplash.com/photo-1549298916-b41d501d3772?auto=format&fit=crop&w=900&q=85" alt="鞋类商品案例" />
+            </div>
+            <div class="case-body">
+              <h3>鞋类主图与氛围图</h3>
+              <p>快速生成适合新品上架、活动推广和多渠道投放的商品视觉。</p>
+              <div class="thumbs">
+                <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=300&q=80" alt="鞋类缩略图" />
+                <img src="https://images.unsplash.com/photo-1543508282-6319a3e2621f?auto=format&fit=crop&w=300&q=80" alt="鞋类缩略图" />
+                <img src="https://images.unsplash.com/photo-1491553895911-0055eca6402d?auto=format&fit=crop&w=300&q=80" alt="鞋类缩略图" />
+              </div>
+            </div>
+          </article>
+
+          <article class="case-card">
+            <div class="case-label">家居生活</div>
+            <div class="case-main">
+              <img src="https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?auto=format&fit=crop&w=900&q=85" alt="家居案例" />
+            </div>
+            <div class="case-body">
+              <h3>家居场景化表达</h3>
+              <p>通过真实空间氛围强化商品使用感，让商品从白底图进入生活场景。</p>
+              <div class="thumbs">
+                <img src="https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=300&q=80" alt="家居缩略图" />
+                <img src="https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=300&q=80" alt="家居缩略图" />
+                <img src="https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop&w=300&q=80" alt="家居缩略图" />
+              </div>
+            </div>
+          </article>
+
+          <article class="case-card">
+            <div class="case-label">数码产品</div>
+            <div class="case-main">
+              <img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=900&q=85" alt="数码产品案例" />
+            </div>
+            <div class="case-body">
+              <h3>数码产品卖点图</h3>
+              <p>突出材质、结构和使用方式，适合主图、详情页和投放素材延展。</p>
+              <div class="thumbs">
+                <img src="https://images.unsplash.com/photo-1517336714731-489689fd1ca8?auto=format&fit=crop&w=300&q=80" alt="数码缩略图" />
+                <img src="https://images.unsplash.com/photo-1491933382434-500287f9b54b?auto=format&fit=crop&w=300&q=80" alt="数码缩略图" />
+                <img src="https://images.unsplash.com/photo-1516321497487-e288fb19713f?auto=format&fit=crop&w=300&q=80" alt="数码缩略图" />
+              </div>
+            </div>
+          </article>
+
+          <article class="case-card">
+            <div class="case-label">食品饮品</div>
+            <div class="case-main">
+              <img src="https://images.unsplash.com/photo-1509042239860-f550ce710b93?auto=format&fit=crop&w=900&q=85" alt="食品饮品案例" />
+            </div>
+            <div class="case-body">
+              <h3>饮品氛围营销图</h3>
+              <p>结合口味、季节和消费场景，生成更适合社媒与电商活动的素材。</p>
+              <div class="thumbs">
+                <img src="https://images.unsplash.com/photo-1497534446932-c925b458314e?auto=format&fit=crop&w=300&q=80" alt="饮品缩略图" />
+                <img src="https://images.unsplash.com/photo-1544145945-f90425340c7e?auto=format&fit=crop&w=300&q=80" alt="饮品缩略图" />
+                <img src="https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?auto=format&fit=crop&w=300&q=80" alt="饮品缩略图" />
+              </div>
+            </div>
+          </article>
+
+          <article class="case-card">
+            <div class="case-label">营销活动</div>
+            <div class="case-main">
+              <img src="https://images.unsplash.com/photo-1607083206869-4c7672e72a8a?auto=format&fit=crop&w=900&q=85" alt="营销活动案例" />
+            </div>
+            <div class="case-body">
+              <h3>活动素材快速延展</h3>
+              <p>围绕活动主题生成多比例视觉，用于首页、详情页、广告和社媒投放。</p>
+              <div class="thumbs">
+                <img src="https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?auto=format&fit=crop&w=300&q=80" alt="营销缩略图" />
+                <img src="https://images.unsplash.com/photo-1556740758-90de374c12ad?auto=format&fit=crop&w=300&q=80" alt="营销缩略图" />
+                <img src="https://images.unsplash.com/photo-1607083206968-13611e3d76db?auto=format&fit=crop&w=300&q=80" alt="营销缩略图" />
+              </div>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="flow">
+      <div class="container">
+        <div class="center">
+          <div class="eyebrow">平台使用流程</div>
+          <h2 class="section-title">从上传商品到沉淀素材库，只需要一个清晰流程</h2>
+          <p class="section-desc">
+            让商家把时间投入到商品和运营决策上，而不是反复调参、找图、返工修图。
+          </p>
+        </div>
+
+        <div class="flow-grid">
+          <div class="flow-card">
+            <div class="flow-no">01</div>
+            <h3>上传商品图</h3>
+            <p>导入商品图片，平台自动识别主体、边缘和可处理区域。</p>
+            <img src="https://images.unsplash.com/photo-1585386959984-a4155224a1ad?auto=format&fit=crop&w=500&q=80" alt="上传商品图" />
+          </div>
+          <div class="flow-card">
+            <div class="flow-no">02</div>
+            <h3>选择任务模板</h3>
+            <p>选择换背景、白底图、场景图、营销图等电商任务。</p>
+            <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=500&q=80" alt="选择任务模板" />
+          </div>
+          <div class="flow-card">
+            <div class="flow-no">03</div>
+            <h3>一键生成结果</h3>
+            <p>单次任务生成多张结果，便于用户快速比较和筛选。</p>
+            <img src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=500&q=80" alt="一键生成结果" />
+          </div>
+          <div class="flow-card">
+            <div class="flow-no">04</div>
+            <h3>优化满意版本</h3>
+            <p>通过智能助手完成局部微调、背景修正和细节优化。</p>
+            <img src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=500&q=80" alt="优化图片结果" />
+          </div>
+          <div class="flow-card">
+            <div class="flow-no">05</div>
+            <h3>导出与复用</h3>
+            <p>导出交付、保存素材库，后续继续用于上新和活动延展。</p>
+            <img src="https://images.unsplash.com/photo-1556742502-ec7c0e9f34b1?auto=format&fit=crop&w=500&q=80" alt="素材库复用" />
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section-soft" id="users">
+      <div class="container">
+        <div class="center">
+          <div class="eyebrow">适用用户</div>
+          <h2 class="section-title">适合需要持续生产电商视觉素材的团队</h2>
+          <p class="section-desc">
+            无论是中小商家、品牌团队，还是代运营与视觉服务商，都能用更低成本获得更稳定的素材生产能力。
+          </p>
+        </div>
+
+        <div class="user-grid">
+          <div class="user-card">
+            <h3>中小电商商家</h3>
+            <p>缺少专业设计人员，需要快速完成上新、主图和活动素材。</p>
+            <div class="user-value">降低素材制作门槛，缩短上新准备时间</div>
+          </div>
+          <div class="user-card">
+            <h3>成长型品牌</h3>
+            <p>需要稳定的品牌视觉表达，同时控制拍摄和外包成本。</p>
+            <div class="user-value">沉淀品牌风格，提升视觉一致性</div>
+          </div>
+          <div class="user-card">
+            <h3>店群卖家 / 多 SKU 经营者</h3>
+            <p>SKU 数量多、平台多，素材需求量大且更新频繁。</p>
+            <div class="user-value">批量生成并适配多平台素材规格</div>
+          </div>
+          <div class="user-card">
+            <h3>代运营团队</h3>
+            <p>同时服务多个店铺，需要更稳定的交付流程和协作方式。</p>
+            <div class="user-value">提升交付效率，减少重复沟通与返工</div>
+          </div>
+          <div class="user-card">
+            <h3>电商视觉服务商</h3>
+            <p>需要扩展设计产能，为客户提供更快的初稿和延展方案。</p>
+            <div class="user-value">以 AI 辅助创意生产，提高服务承载量</div>
+          </div>
+          <div class="user-card">
+            <h3>企业客户 / 系统型用户</h3>
+            <p>希望将素材生成能力接入内部系统或自动化工作流。</p>
+            <div class="user-value">通过 API 控制台实现系统级集成</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="pricing">
+      <div class="container">
+        <div class="center">
+          <div class="eyebrow">价格方案</div>
+          <h2 class="section-title">从免费体验到企业级接入，按生产规模选择</h2>
+          <p class="section-desc">
+            套餐结构保持清晰，适合毕业设计原型展示，也符合真实 SaaS 产品官网的信息组织方式。
+          </p>
+        </div>
+
+        <div class="pricing-grid">
+          <article class="price-card">
+            <h3>免费体验版</h3>
+            <p class="fit">适合首次体验和小规模测试</p>
+            <div class="price">¥0 <span>/ 月</span></div>
+            <ul class="features">
+              <li>基础商品图生成</li>
+              <li>每日少量生成额度</li>
+              <li>基础白底图任务</li>
+              <li>标准导出质量</li>
+            </ul>
+            <button class="btn btn-ghost js-start">立即体验</button>
+          </article>
+
+          <article class="price-card featured">
+            <div class="recommend">主推方案</div>
+            <h3>专业版</h3>
+            <p class="fit">适合中小商家持续上新</p>
+            <div class="price">¥99 <span>/ 月</span></div>
+            <ul class="features">
+              <li>商品图与场景图生成</li>
+              <li>一键换背景与营销图</li>
+              <li>智能助手轻处理</li>
+              <li>高清导出与素材库</li>
+            </ul>
+            <button class="btn btn-primary js-start">选择专业版</button>
+          </article>
+
+          <article class="price-card">
+            <h3>团队版</h3>
+            <p class="fit">适合代运营和视觉服务团队</p>
+            <div class="price">¥299 <span>/ 月</span></div>
+            <ul class="features">
+              <li>多人协作空间</li>
+              <li>更高生成额度</li>
+              <li>团队素材库管理</li>
+              <li>LoRA 资产训练额度</li>
+            </ul>
+            <button class="btn btn-ghost js-start">联系开通</button>
+          </article>
+
+          <article class="price-card">
+            <h3>企业版</h3>
+            <p class="fit">适合系统型客户和批量生产</p>
+            <div class="price">定制 <span>/ 年</span></div>
+            <ul class="features">
+              <li>API 控制台接入</li>
+              <li>专属模型与资产管理</li>
+              <li>权限、审计与私有化方案</li>
+              <li>企业级技术支持</li>
+            </ul>
+            <button class="btn btn-ghost js-start">预约咨询</button>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section-soft" id="faq">
+      <div class="container">
+        <div class="center">
+          <div class="eyebrow">FAQ</div>
+          <h2 class="section-title">常见问题</h2>
+          <p class="section-desc">围绕平台定位、商用能力、智能助手、LoRA 和 API 接入进行说明。</p>
+        </div>
+
+        <div class="faq-wrap">
+          <div class="faq-item open">
+            <button class="faq-q">这个平台适合哪些商家？<span>+</span></button>
+            <div class="faq-a">
+              <p>适合需要持续生产商品图、场景图、营销图的电商商家、品牌方、代运营团队、视觉服务商和企业客户。</p>
+            </div>
+          </div>
+
+          <div class="faq-item">
+            <button class="faq-q">是否支持商用？<span>+</span></button>
+            <div class="faq-a">
+              <p>平台定位为商用素材生产工具，围绕电商使用场景设计流程。实际商用时仍应结合素材来源、品牌规范和平台规则进行审核。</p>
+            </div>
+          </div>
+
+          <div class="faq-item">
+            <button class="faq-q">是否可以生成商品主图和场景图？<span>+</span></button>
+            <div class="faq-a">
+              <p>可以。平台将商品主图、场景图、白底图、平铺图、营销图等需求封装为任务入口，降低用户操作难度。</p>
+            </div>
+          </div>
+
+          <div class="faq-item">
+            <button class="faq-q">智能助手和普通聊天客服有什么区别？<span>+</span></button>
+            <div class="faq-a">
+              <p>智能助手不是客服，而是围绕图片处理任务提供预处理、局部修改、结果优化和任务推荐的轻量工作入口。</p>
+            </div>
+          </div>
+
+          <div class="faq-item">
+            <button class="faq-q">LoRA 可以做什么？<span>+</span></button>
+            <div class="faq-a">
+              <p>LoRA 用于沉淀固定商品、固定模特或固定品牌风格，帮助高价值用户在长期生产中保持视觉一致性。</p>
+            </div>
+          </div>
+
+          <div class="faq-item">
+            <button class="faq-q">是否支持 API 接入？<span>+</span></button>
+            <div class="faq-a">
+              <p>支持。企业版可通过 API 控制台接入商品管理系统、ERP、内部素材系统或自动化生产流程。</p>
+            </div>
+          </div>
+
+          <div class="faq-item">
+            <button class="faq-q">是否有免费试用？<span>+</span></button>
+            <div class="faq-a">
+              <p>有。免费体验版适合首次了解平台能力，专业版和团队版适合持续素材生产场景。</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container">
+        <div class="bottom-cta">
+          <div>
+            <h2>从第一张商品图开始，建立你的 AI 电商视觉生产流程</h2>
+            <p>让上新、换背景、场景图、营销图和素材复用进入同一个平台，减少重复制作，提高交付稳定性。</p>
+          </div>
+          <button class="btn js-start">免费开始生成</button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div>
+          <div class="footer-logo">AI 电商多模态设计平台</div>
+          <p>
+            面向电商商家、品牌方、代运营团队和视觉服务商的 AI 商用素材生产平台。
+          </p>
+        </div>
+
+        <div>
+          <h4>产品能力</h4>
+          <a href="#capabilities">商品图生成</a>
+          <a href="#capabilities">场景图生成</a>
+          <a href="#capabilities">营销图生成</a>
+          <a href="#lora">LoRA 资产</a>
+        </div>
+
+        <div>
+          <h4>场景方案</h4>
+          <a href="#systems">场景化任务</a>
+          <a href="#systems">智能助手</a>
+          <a href="#flow">使用流程</a>
+          <a href="#users">适用用户</a>
+        </div>
+
+        <div>
+          <h4>帮助中心</h4>
+          <a href="#faq">常见问题</a>
+          <a href="#pricing">价格方案</a>
+          <a href="#cases">案例展示</a>
+          <a href="javascript:void(0)" data-toast="帮助中心入口已为原型演示保留">使用文档</a>
+        </div>
+
+        <div>
+          <h4>联系方式</h4>
+          <a href="mailto:contact@ai-ecommerce-design.com">contact@ai-ecommerce-design.com</a>
+          <a href="javascript:void(0)" data-toast="在线咨询入口已为原型演示保留">在线咨询</a>
+          <a href="javascript:void(0)" data-toast="企业合作入口已为原型演示保留">企业合作</a>
+        </div>
+      </div>
+
+      <div class="copyright">
+        <span>© 2026 AI 电商多模态设计平台. All rights reserved.</span>
+        <span>隐私政策 · 服务条款 · 商用规范</span>
+      </div>
+    </div>
+  </footer>
+
+  <div class="toast" id="toast">已收到操作</div>
+
+  <script>
+    const navbar = document.getElementById("navbar");
+    const toast = document.getElementById("toast");
+    let toastTimer = null;
+
+    window.addEventListener("scroll", () => {
+      if (window.scrollY > 12) {
+        navbar.classList.add("scrolled");
+      } else {
+        navbar.classList.remove("scrolled");
+      }
+    });
+
+    function showToast(message) {
+      toast.textContent = message;
+      toast.classList.add("show");
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => {
+        toast.classList.remove("show");
+      }, 2200);
+    }
+
+    document.querySelectorAll(".js-start").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        showToast("已进入免费生成流程，原型演示中可继续扩展登录与任务创建页面");
+      });
+    });
+
+    document.querySelectorAll("[data-toast]").forEach((item) => {
+      item.addEventListener("click", () => {
+        showToast(item.dataset.toast);
+      });
+    });
+
+    document.querySelectorAll('a[href^="#"]').forEach((link) => {
+      link.addEventListener("click", (event) => {
+        const targetId = link.getAttribute("href");
+        if (targetId.length > 1) {
+          const target = document.querySelector(targetId);
+          if (target) {
+            event.preventDefault();
+            const top = target.getBoundingClientRect().top + window.scrollY - 82;
+            window.scrollTo({
+              top,
+              behavior: "smooth"
+            });
+          }
+        }
+      });
+    });
+
+    document.querySelectorAll(".faq-q").forEach((button) => {
+      button.addEventListener("click", () => {
+        const item = button.parentElement;
+        item.classList.toggle("open");
+      });
+    });
+
+    const tabButtons = document.querySelectorAll(".tab-btn");
+    const panels = document.querySelectorAll(".system-panel");
+
+    tabButtons.forEach((button) => {
+      button.addEventListener("click", () => {
+        const tab = button.dataset.tab;
+
+        tabButtons.forEach((btn) => btn.classList.remove("active"));
+        button.classList.add("active");
+
+        panels.forEach((panel) => {
+          panel.classList.toggle("active", panel.dataset.panel === tab);
+        });
+      });
+    });
+
+    document.querySelectorAll(".price-card .btn, .case-card, .cap-card").forEach((item) => {
+      item.addEventListener("mousedown", () => {
+        item.style.transform = "scale(0.985)";
+      });
+
+      item.addEventListener("mouseup", () => {
+        item.style.transform = "";
+      });
+
+      item.addEventListener("mouseleave", () => {
+        item.style.transform = "";
+      });
+    });
+</script>
+  <script src="../assets/js/mock.js"></script>
+  <script src="../assets/js/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,2144 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI 电商多模态设计平台 - LoRA 训练页</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    :root {
+      --bg: #f6f7fb;
+      --panel: #ffffff;
+      --panel-soft: #f9faff;
+      --text: #1f2937;
+      --muted: #6b7280;
+      --light: #eef2ff;
+      --border: #e5e7eb;
+      --primary: #6d5dfc;
+      --primary-dark: #5547df;
+      --primary-soft: #eef0ff;
+      --green: #16a34a;
+      --green-soft: #ecfdf3;
+      --orange: #f59e0b;
+      --orange-soft: #fff7ed;
+      --red: #ef4444;
+      --shadow: 0 10px 28px rgba(31, 41, 55, 0.08);
+      --shadow-soft: 0 8px 20px rgba(31, 41, 55, 0.06);
+      --radius: 18px;
+    }
+
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      min-height: 100%;
+      overflow-x: hidden;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC",
+        "Microsoft YaHei", Arial, sans-serif;
+      color: var(--text);
+      background: var(--bg);
+    }
+
+    button,
+    input {
+      font-family: inherit;
+    }
+
+    button {
+      cursor: pointer;
+      border: none;
+    }
+
+    img {
+      display: block;
+      width: 100%;
+      max-width: 100%;
+      object-fit: cover;
+    }
+
+    .app {
+      min-height: 100vh;
+    }
+
+    .sidebar {
+      position: fixed;
+      left: 0;
+      top: 0;
+      width: 220px;
+      height: 100vh;
+      padding: 18px 14px;
+      background: #ffffff;
+      border-right: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      z-index: 20;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 6px 8px 18px;
+    }
+
+    .brand-logo {
+      width: 34px;
+      height: 34px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #6d5dfc, #9b7bff);
+      color: #fff;
+      display: grid;
+      place-items: center;
+      font-weight: 800;
+      box-shadow: 0 8px 18px rgba(109, 93, 252, 0.25);
+    }
+
+    .brand-text strong {
+      display: block;
+      font-size: 14px;
+      letter-spacing: 0.2px;
+    }
+
+    .brand-text span {
+      display: block;
+      margin-top: 2px;
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    .nav-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .nav-bottom {
+      margin-top: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .nav-item {
+      height: 40px;
+      padding: 0 10px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: #4b5563;
+      font-size: 14px;
+      transition: all 0.18s ease;
+    }
+
+    .nav-item:hover {
+      background: #f3f4ff;
+      color: var(--primary);
+      transform: translateX(2px);
+    }
+
+    .nav-item.active {
+      background: var(--primary-soft);
+      color: var(--primary);
+      font-weight: 700;
+    }
+
+    .nav-icon {
+      width: 24px;
+      height: 24px;
+      border-radius: 9px;
+      display: grid;
+      place-items: center;
+      font-size: 13px;
+      background: #f3f4f6;
+      flex: 0 0 auto;
+    }
+
+    .nav-item.active .nav-icon {
+      background: #dddfff;
+    }
+
+    .plan-card {
+      margin: 16px 4px 10px;
+      padding: 12px;
+      border-radius: 16px;
+      background: linear-gradient(180deg, #f7f5ff, #ffffff);
+      border: 1px solid #e7e2ff;
+    }
+
+    .plan-card strong {
+      font-size: 13px;
+    }
+
+    .plan-card p {
+      margin: 5px 0 8px;
+      font-size: 12px;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    .mini-progress {
+      height: 7px;
+      border-radius: 999px;
+      background: #e9e9f4;
+      overflow: hidden;
+    }
+
+    .mini-progress span {
+      display: block;
+      height: 100%;
+      width: 68%;
+      background: linear-gradient(90deg, #6d5dfc, #9b7bff);
+      border-radius: inherit;
+    }
+
+    .main {
+      margin-left: 220px;
+      min-width: 0;
+    }
+
+    .topbar {
+      height: 68px;
+      padding: 0 22px;
+      background: rgba(255, 255, 255, 0.88);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      position: sticky;
+      top: 0;
+      z-index: 15;
+      min-width: 0;
+    }
+
+    .breadcrumb {
+      flex: 1 1 auto;
+      min-width: 0;
+      color: var(--muted);
+      font-size: 13px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .breadcrumb strong {
+      color: var(--text);
+      font-weight: 700;
+    }
+
+    .search {
+      width: 260px;
+      height: 38px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: #f9fafb;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 0 12px;
+      flex: 0 0 auto;
+    }
+
+    .search input {
+      width: 100%;
+      border: none;
+      outline: none;
+      background: transparent;
+      font-size: 13px;
+      color: var(--text);
+      min-width: 0;
+    }
+
+    .quota {
+      height: 34px;
+      display: flex;
+      align-items: center;
+      padding: 0 11px;
+      border-radius: 999px;
+      background: #f5f3ff;
+      color: #5b4ee6;
+      font-size: 12px;
+      font-weight: 700;
+      white-space: nowrap;
+      flex: 0 0 auto;
+    }
+
+    .icon-btn {
+      width: 36px;
+      height: 36px;
+      border-radius: 12px;
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      color: #4b5563;
+      display: grid;
+      place-items: center;
+      transition: all 0.18s ease;
+      flex: 0 0 auto;
+    }
+
+    .icon-btn:hover {
+      background: var(--primary-soft);
+      color: var(--primary);
+      border-color: #d8dbff;
+    }
+
+    .primary-btn,
+    .secondary-btn,
+    .ghost-btn {
+      height: 38px;
+      padding: 0 14px;
+      border-radius: 12px;
+      font-size: 13px;
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      white-space: nowrap;
+      transition: all 0.18s ease;
+    }
+
+    .primary-btn {
+      background: linear-gradient(135deg, #6d5dfc, #8a6dff);
+      color: #fff;
+      box-shadow: 0 8px 18px rgba(109, 93, 252, 0.22);
+    }
+
+    .primary-btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 10px 22px rgba(109, 93, 252, 0.28);
+    }
+
+    .secondary-btn {
+      background: #ffffff;
+      color: #374151;
+      border: 1px solid var(--border);
+    }
+
+    .secondary-btn:hover {
+      border-color: #cfd3ff;
+      color: var(--primary);
+      background: #fbfbff;
+    }
+
+    .ghost-btn {
+      height: 32px;
+      padding: 0 10px;
+      background: #f8fafc;
+      color: #4b5563;
+      border: 1px solid var(--border);
+      font-size: 12px;
+    }
+
+    .ghost-btn:hover {
+      background: var(--primary-soft);
+      color: var(--primary);
+    }
+
+    .avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      overflow: hidden;
+      border: 2px solid #fff;
+      box-shadow: 0 3px 10px rgba(31, 41, 55, 0.12);
+      flex: 0 0 auto;
+    }
+
+    .workspace {
+      padding: 20px 22px 32px;
+      min-width: 0;
+    }
+
+    .page-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 300px;
+      gap: 20px;
+      align-items: start;
+      min-width: 0;
+    }
+
+    .content-col,
+    .right-rail {
+      min-width: 0;
+    }
+
+    .right-rail {
+      position: sticky;
+      top: 88px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .hero {
+      min-height: 145px;
+      padding: 22px 24px;
+      border-radius: 22px;
+      background:
+        radial-gradient(circle at 92% 18%, rgba(139, 92, 246, 0.16), transparent 26%),
+        linear-gradient(135deg, #ffffff, #f8f7ff);
+      border: 1px solid #ecebff;
+      box-shadow: var(--shadow-soft);
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      align-items: center;
+      min-width: 0;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      height: 28px;
+      padding: 0 10px;
+      border-radius: 999px;
+      background: #eef0ff;
+      color: var(--primary);
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .hero h1 {
+      margin: 12px 0 8px;
+      font-size: 28px;
+      letter-spacing: -0.6px;
+      line-height: 1.1;
+    }
+
+    .hero p {
+      margin: 0;
+      max-width: 660px;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.7;
+    }
+
+    .hero-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex: 0 0 auto;
+    }
+
+    .section {
+      margin-top: 16px;
+      padding: 18px;
+      border-radius: 22px;
+      background: var(--panel);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-soft);
+      min-width: 0;
+    }
+
+    .section-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 14px;
+      margin-bottom: 14px;
+      min-width: 0;
+    }
+
+    .section-title h2 {
+      margin: 0;
+      font-size: 17px;
+      letter-spacing: -0.2px;
+    }
+
+    .section-title p {
+      margin: 5px 0 0;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .type-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+      min-width: 0;
+    }
+
+    .type-card {
+      min-width: 0;
+      height: 198px;
+      padding: 12px;
+      border-radius: 18px;
+      border: 1px solid var(--border);
+      background: #ffffff;
+      transition: all 0.18s ease;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      gap: 9px;
+    }
+
+    .type-card:hover {
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-soft);
+      border-color: #d9dcff;
+    }
+
+    .type-card.active {
+      border-color: #9b93ff;
+      background: linear-gradient(180deg, #fbfbff, #ffffff);
+      box-shadow: 0 10px 26px rgba(109, 93, 252, 0.12);
+    }
+
+    .type-top {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      min-width: 0;
+    }
+
+    .type-icon {
+      width: 34px;
+      height: 34px;
+      border-radius: 12px;
+      display: grid;
+      place-items: center;
+      background: #f2f3ff;
+      color: var(--primary);
+      font-size: 17px;
+      flex: 0 0 auto;
+    }
+
+    .type-top strong {
+      font-size: 14px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .type-card p {
+      margin: 0;
+      font-size: 12px;
+      color: var(--muted);
+      line-height: 1.45;
+      min-height: 34px;
+    }
+
+    .tagline {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+      min-width: 0;
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      height: 22px;
+      padding: 0 7px;
+      border-radius: 999px;
+      background: #f3f4f6;
+      color: #4b5563;
+      font-size: 11px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .type-img {
+      height: 58px;
+      border-radius: 14px;
+      overflow: hidden;
+      margin-top: auto;
+    }
+
+    .upload-wrap {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 260px;
+      gap: 14px;
+      min-width: 0;
+    }
+
+    .dropzone {
+      min-height: 236px;
+      border: 1.5px dashed #cfd3ff;
+      border-radius: 20px;
+      background:
+        linear-gradient(180deg, rgba(248, 249, 255, 0.88), rgba(255, 255, 255, 0.95)),
+        url("https://images.unsplash.com/photo-1607083206869-4c7672e72a8a?auto=format&fit=crop&w=1000&q=80");
+      background-size: cover;
+      background-position: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 18px;
+      transition: all 0.18s ease;
+      min-width: 0;
+    }
+
+    .dropzone.dragover {
+      border-color: var(--primary);
+      box-shadow: inset 0 0 0 2px rgba(109, 93, 252, 0.12);
+      transform: scale(0.995);
+    }
+
+    .upload-inner {
+      width: 100%;
+      max-width: 430px;
+      padding: 18px;
+      border-radius: 18px;
+      background: rgba(255, 255, 255, 0.86);
+      backdrop-filter: blur(10px);
+      text-align: center;
+      box-shadow: var(--shadow-soft);
+    }
+
+    .upload-mark {
+      width: 46px;
+      height: 46px;
+      margin: 0 auto 10px;
+      border-radius: 16px;
+      background: #eef0ff;
+      color: var(--primary);
+      display: grid;
+      place-items: center;
+      font-size: 24px;
+    }
+
+    .upload-inner h3 {
+      margin: 0 0 6px;
+      font-size: 16px;
+    }
+
+    .upload-inner p {
+      margin: 0 0 12px;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
+    .tips-card {
+      min-height: 236px;
+      padding: 15px;
+      border-radius: 20px;
+      background: #fafbff;
+      border: 1px solid var(--border);
+      min-width: 0;
+    }
+
+    .tips-card strong {
+      display: block;
+      margin-bottom: 10px;
+      font-size: 14px;
+    }
+
+    .tip-list {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .tip-list li {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+      color: #4b5563;
+    }
+
+    .tip-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--primary);
+      flex: 0 0 auto;
+    }
+
+    .sample-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+      min-width: 0;
+    }
+
+    .sample-card {
+      min-width: 0;
+      border-radius: 17px;
+      border: 1px solid var(--border);
+      background: #ffffff;
+      overflow: hidden;
+      transition: all 0.18s ease;
+      cursor: pointer;
+      position: relative;
+    }
+
+    .sample-card:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .sample-card.active {
+      border-color: #8f86ff;
+      box-shadow: 0 8px 20px rgba(109, 93, 252, 0.14);
+    }
+
+    .sample-card.key {
+      border-color: #16a34a;
+    }
+
+    .sample-img {
+      height: 100px;
+      overflow: hidden;
+      background: #f3f4f6;
+    }
+
+    .sample-meta {
+      padding: 9px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .sample-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      min-width: 0;
+    }
+
+    .sample-row strong {
+      font-size: 12px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .status {
+      height: 22px;
+      padding: 0 7px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 800;
+      display: inline-flex;
+      align-items: center;
+      white-space: nowrap;
+    }
+
+    .status.good {
+      background: var(--green-soft);
+      color: var(--green);
+    }
+
+    .status.mid {
+      background: var(--orange-soft);
+      color: var(--orange);
+    }
+
+    .sample-actions {
+      display: flex;
+      gap: 6px;
+      min-width: 0;
+    }
+
+    .sample-actions button {
+      flex: 1;
+      height: 28px;
+      border-radius: 9px;
+      font-size: 11px;
+      font-weight: 700;
+      background: #f8fafc;
+      color: #4b5563;
+      border: 1px solid var(--border);
+    }
+
+    .sample-actions button:hover {
+      color: var(--primary);
+      background: var(--primary-soft);
+    }
+
+    .sample-actions .delete:hover {
+      color: var(--red);
+      background: #fff1f2;
+      border-color: #fecdd3;
+    }
+
+    .quality-grid {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 12px;
+      min-width: 0;
+    }
+
+    .quality-card {
+      padding: 13px;
+      border-radius: 17px;
+      background: #ffffff;
+      border: 1px solid var(--border);
+      transition: all 0.18s ease;
+      min-width: 0;
+    }
+
+    .quality-card:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .quality-card strong {
+      display: block;
+      font-size: 13px;
+      margin-bottom: 8px;
+    }
+
+    .score-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 8px;
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .score-row b {
+      color: var(--text);
+      font-size: 14px;
+    }
+
+    .bar {
+      height: 7px;
+      border-radius: 999px;
+      background: #eef2f7;
+      overflow: hidden;
+      margin-bottom: 9px;
+    }
+
+    .bar span {
+      display: block;
+      height: 100%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, #6d5dfc, #9b7bff);
+    }
+
+    .bar.green span {
+      background: linear-gradient(90deg, #22c55e, #86efac);
+    }
+
+    .bar.orange span {
+      background: linear-gradient(90deg, #f59e0b, #fcd34d);
+    }
+
+    .quality-card p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.45;
+    }
+
+    .config-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+      min-width: 0;
+    }
+
+    .field {
+      min-width: 0;
+      padding: 14px;
+      border-radius: 18px;
+      border: 1px solid var(--border);
+      background: #ffffff;
+    }
+
+    .field.full {
+      grid-column: 1 / -1;
+    }
+
+    .field label {
+      display: block;
+      margin-bottom: 9px;
+      font-size: 13px;
+      font-weight: 800;
+    }
+
+    .text-input {
+      width: 100%;
+      height: 40px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      outline: none;
+      padding: 0 12px;
+      color: var(--text);
+      background: #f9fafb;
+      transition: all 0.18s ease;
+      min-width: 0;
+    }
+
+    .text-input:focus {
+      border-color: #9b93ff;
+      background: #ffffff;
+      box-shadow: 0 0 0 4px rgba(109, 93, 252, 0.1);
+    }
+
+    .chip-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      min-width: 0;
+    }
+
+    .chip {
+      min-height: 32px;
+      padding: 0 11px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: #f9fafb;
+      color: #4b5563;
+      font-size: 12px;
+      font-weight: 800;
+      transition: all 0.18s ease;
+    }
+
+    .chip:hover {
+      border-color: #cfd3ff;
+      color: var(--primary);
+    }
+
+    .chip.active {
+      background: var(--primary-soft);
+      border-color: #cfd3ff;
+      color: var(--primary);
+    }
+
+    .effect-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+      min-width: 0;
+    }
+
+    .effect-card {
+      min-width: 0;
+      border-radius: 18px;
+      border: 1px solid var(--border);
+      overflow: hidden;
+      background: #ffffff;
+      transition: all 0.18s ease;
+    }
+
+    .effect-card:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .effect-img {
+      height: 122px;
+      overflow: hidden;
+    }
+
+    .effect-body {
+      padding: 12px;
+    }
+
+    .effect-body h3 {
+      margin: 0 0 6px;
+      font-size: 14px;
+    }
+
+    .effect-body p {
+      margin: 0 0 9px;
+      color: var(--muted);
+      line-height: 1.5;
+      font-size: 12px;
+    }
+
+    .rail-card {
+      padding: 15px;
+      border-radius: 20px;
+      background: #ffffff;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-soft);
+      min-width: 0;
+    }
+
+    .rail-card h3 {
+      margin: 0 0 12px;
+      font-size: 15px;
+    }
+
+    .summary-list {
+      display: flex;
+      flex-direction: column;
+      gap: 9px;
+      margin-bottom: 13px;
+    }
+
+    .summary-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 12px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid #f1f2f6;
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .summary-item:last-child {
+      border-bottom: none;
+      padding-bottom: 0;
+    }
+
+    .summary-item strong {
+      color: var(--text);
+      font-weight: 800;
+      text-align: right;
+      line-height: 1.4;
+      min-width: 90px;
+    }
+
+    .rail-card .primary-btn {
+      width: 100%;
+    }
+
+    .assistant-img {
+      height: 94px;
+      border-radius: 15px;
+      overflow: hidden;
+      margin-bottom: 10px;
+    }
+
+    .rail-card p {
+      margin: 0 0 12px;
+      font-size: 12px;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    .flow-list {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .flow-list li {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      font-size: 12px;
+      color: #4b5563;
+    }
+
+    .step-num {
+      width: 22px;
+      height: 22px;
+      border-radius: 8px;
+      display: grid;
+      place-items: center;
+      background: var(--primary-soft);
+      color: var(--primary);
+      font-weight: 900;
+      font-size: 11px;
+      flex: 0 0 auto;
+    }
+
+    .toast-wrap {
+      position: fixed;
+      top: 84px;
+      right: 22px;
+      z-index: 80;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      max-width: 340px;
+      pointer-events: none;
+    }
+
+    .toast {
+      padding: 12px 14px;
+      border-radius: 14px;
+      background: rgba(31, 41, 55, 0.94);
+      color: #fff;
+      box-shadow: var(--shadow);
+      font-size: 13px;
+      line-height: 1.5;
+      animation: toastIn 0.2s ease;
+    }
+
+    @keyframes toastIn {
+      from {
+        opacity: 0;
+        transform: translateY(-8px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .modal-mask {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.36);
+      backdrop-filter: blur(7px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 60;
+      padding: 20px;
+    }
+
+    .modal-mask.show {
+      display: flex;
+    }
+
+    .modal {
+      width: 440px;
+      max-width: 100%;
+      padding: 22px;
+      border-radius: 24px;
+      background: #ffffff;
+      box-shadow: 0 24px 70px rgba(15, 23, 42, 0.24);
+    }
+
+    .modal h3 {
+      margin: 0 0 8px;
+      font-size: 20px;
+    }
+
+    .modal p {
+      margin: 0 0 16px;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
+    .modal-progress {
+      height: 10px;
+      border-radius: 999px;
+      background: #eef2f7;
+      overflow: hidden;
+      margin-bottom: 14px;
+    }
+
+    .modal-progress span {
+      display: block;
+      width: 0%;
+      height: 100%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, #6d5dfc, #8b5cf6);
+      transition: width 0.28s ease;
+    }
+
+    .modal-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      margin-top: 16px;
+    }
+
+    .floating-ai {
+      position: fixed;
+      right: 22px;
+      bottom: 22px;
+      z-index: 55;
+    }
+
+    .ai-fab {
+      height: 46px;
+      padding: 0 16px;
+      border-radius: 999px;
+      background: linear-gradient(135deg, #6d5dfc, #8b5cf6);
+      color: #fff;
+      font-weight: 900;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 14px 30px rgba(109, 93, 252, 0.28);
+    }
+
+    .ai-drawer {
+      position: fixed;
+      right: 22px;
+      bottom: 82px;
+      width: 320px;
+      max-width: calc(100vw - 44px);
+      border-radius: 22px;
+      background: #ffffff;
+      border: 1px solid var(--border);
+      box-shadow: 0 22px 60px rgba(15, 23, 42, 0.18);
+      display: none;
+      overflow: hidden;
+      z-index: 56;
+    }
+
+    .ai-drawer.show {
+      display: block;
+      animation: drawerIn 0.2s ease;
+    }
+
+    @keyframes drawerIn {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .ai-head {
+      padding: 14px;
+      background: linear-gradient(135deg, #f6f4ff, #ffffff);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .ai-head strong {
+      font-size: 14px;
+    }
+
+    .ai-close {
+      width: 28px;
+      height: 28px;
+      border-radius: 10px;
+      background: #ffffff;
+      border: 1px solid var(--border);
+      color: #4b5563;
+    }
+
+    .ai-body {
+      padding: 14px;
+    }
+
+    .ai-message {
+      padding: 10px 11px;
+      border-radius: 14px;
+      background: #f7f8ff;
+      color: #4b5563;
+      font-size: 12px;
+      line-height: 1.6;
+      margin-bottom: 10px;
+    }
+
+    .quick-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+      margin-bottom: 12px;
+    }
+
+    .quick-actions button {
+      height: 28px;
+      padding: 0 9px;
+      border-radius: 999px;
+      background: #f9fafb;
+      border: 1px solid var(--border);
+      color: #4b5563;
+      font-size: 11px;
+      font-weight: 800;
+    }
+
+    .quick-actions button:hover {
+      color: var(--primary);
+      background: var(--primary-soft);
+    }
+
+    .ai-input-row {
+      display: flex;
+      gap: 8px;
+    }
+
+    .ai-input-row input {
+      min-width: 0;
+      flex: 1;
+      height: 36px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      padding: 0 10px;
+      outline: none;
+      background: #f9fafb;
+      font-size: 12px;
+    }
+
+    .ai-input-row button {
+      width: 56px;
+      border-radius: 12px;
+      color: #fff;
+      background: var(--primary);
+      font-weight: 800;
+    }
+
+    input[type="file"] {
+      display: none;
+    }
+
+    @media (max-width: 1180px) {
+      .type-grid,
+      .sample-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .quality-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+
+      .page-layout {
+        grid-template-columns: minmax(0, 1fr);
+      }
+
+      .right-rail {
+        position: static;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        display: grid;
+      }
+    }
+
+    @media (max-width: 900px) {
+      .sidebar {
+        display: none;
+      }
+
+      .main {
+        margin-left: 0;
+      }
+
+      .topbar {
+        flex-wrap: wrap;
+        height: auto;
+        padding: 12px 16px;
+      }
+
+      .search {
+        width: 100%;
+        order: 3;
+      }
+
+      .workspace {
+        padding: 16px;
+      }
+
+      .hero {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .upload-wrap,
+      .config-grid,
+      .effect-grid,
+      .right-rail {
+        grid-template-columns: 1fr;
+      }
+
+      .quality-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+</style>
+  <link rel="stylesheet" href="../assets/css/common.css" />
+  <link rel="stylesheet" href="../assets/css/workspace-shell.css" />
+</head>
+
+<body>
+  <div class="app">
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand-logo">AI</div>
+        <div class="brand-text">
+          <strong>电商设计平台</strong>
+          <span>Multimodal Studio</span>
+        </div>
+      </div>
+
+      <nav class="nav-group">
+        <div class="nav-item"><span class="nav-icon">⌂</span>控制台</div>
+        <div class="nav-item"><span class="nav-icon">▦</span>场景化任务</div>
+        <div class="nav-item"><span class="nav-icon">▧</span>素材库</div>
+        <div class="nav-item"><span class="nav-icon">✦</span>智能助手</div>
+        <div class="nav-item active"><span class="nav-icon">◆</span>LoRA 资产</div>
+        <div class="nav-item"><span class="nav-icon">⌘</span>API 控制台</div>
+      </nav>
+
+      <div class="plan-card">
+        <strong>专业版套餐</strong>
+        <p>本月剩余额度 6,460 点，可用于图片生成、样本检测和 LoRA 训练。</p>
+        <div class="mini-progress"><span></span></div>
+      </div>
+
+      <nav class="nav-bottom">
+        <div class="nav-item"><span class="nav-icon">♛</span>会员中心</div>
+        <div class="nav-item"><span class="nav-icon">⚙</span>设置</div>
+        <div class="nav-item"><span class="nav-icon">?</span>帮助中心</div>
+      </nav>
+    </aside>
+
+    <main class="main">
+      <header class="topbar">
+        <div class="breadcrumb">工作台 / <strong>LoRA 资产</strong> / 创建训练</div>
+
+        <label class="search">
+          <span>⌕</span>
+          <input id="topSearch" type="text" placeholder="搜索 LoRA 资产、样本、任务" />
+        </label>
+
+        <div class="quota">专业版 · 剩余额度 6,460 点</div>
+        <button id="noticeBtn" class="icon-btn" title="通知">🔔</button>
+        <button id="topCreateBtn" class="primary-btn">＋ 创建训练</button>
+        <div class="avatar">
+          <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=160&q=80" alt="用户头像" />
+        </div>
+      </header>
+
+      <div class="workspace">
+        <div class="page-layout">
+          <div class="content-col">
+            <section class="hero">
+              <div>
+                <span class="eyebrow">✦ 一致性资产训练</span>
+                <h1>创建 LoRA 训练</h1>
+                <p>
+                  上传样本图片，训练可复用的固定商品、固定模特或品牌风格资产，
+                  让后续生成结果保持稳定统一。
+                </p>
+              </div>
+              <div class="hero-actions">
+                <button id="saveDraftBtn" class="secondary-btn">保存草稿</button>
+                <button id="specBtn" class="ghost-btn">查看训练规范</button>
+              </div>
+            </section>
+
+            <section class="section">
+              <div class="section-head">
+                <div class="section-title">
+                  <h2>选择训练类型</h2>
+                  <p>根据复用目标选择资产类型，后续配置会自动匹配推荐方案。</p>
+                </div>
+              </div>
+
+              <div class="type-grid" id="typeGrid">
+                <article class="type-card active" data-type="固定商品主体" data-time="约 25 分钟" data-credit="800 点">
+                  <div class="type-top">
+                    <span class="type-icon">◈</span>
+                    <strong>固定商品主体</strong>
+                  </div>
+                  <p>适合长期复用同一商品外观、材质和细节。</p>
+                  <div class="tagline">
+                    <span class="tag">美妆</span>
+                    <span class="tag">鞋包</span>
+                    <span class="tag">数码</span>
+                  </div>
+                  <div class="type-img">
+                    <img src="https://images.unsplash.com/photo-1596462502278-27bfdc403348?auto=format&fit=crop&w=640&q=80" alt="固定商品主体示例" />
+                  </div>
+                </article>
+
+                <article class="type-card" data-type="固定模特形象" data-time="约 30 分钟" data-credit="980 点">
+                  <div class="type-top">
+                    <span class="type-icon">◉</span>
+                    <strong>固定模特形象</strong>
+                  </div>
+                  <p>适合服饰、美妆、穿搭场景中复用同一模特形象。</p>
+                  <div class="tagline">
+                    <span class="tag">服饰</span>
+                    <span class="tag">鞋包</span>
+                    <span class="tag">美妆</span>
+                  </div>
+                  <div class="type-img">
+                    <img src="https://images.unsplash.com/photo-1529139574466-a303027c1d8b?auto=format&fit=crop&w=640&q=80" alt="固定模特形象示例" />
+                  </div>
+                </article>
+
+                <article class="type-card" data-type="固定品牌风格" data-time="约 22 分钟" data-credit="760 点">
+                  <div class="type-top">
+                    <span class="type-icon">✦</span>
+                    <strong>固定品牌风格</strong>
+                  </div>
+                  <p>适合保持品牌长期内容的色彩、构图和视觉调性。</p>
+                  <div class="tagline">
+                    <span class="tag">品牌商家</span>
+                    <span class="tag">内容团队</span>
+                  </div>
+                  <div class="type-img">
+                    <img src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=640&q=80" alt="固定品牌风格示例" />
+                  </div>
+                </article>
+
+                <article class="type-card" data-type="固定交付规范" data-time="约 20 分钟" data-credit="700 点">
+                  <div class="type-top">
+                    <span class="type-icon">▣</span>
+                    <strong>固定交付规范</strong>
+                  </div>
+                  <p>适合服务商沉淀不同客户的固定出图标准。</p>
+                  <div class="tagline">
+                    <span class="tag">代运营</span>
+                    <span class="tag">视觉服务商</span>
+                  </div>
+                  <div class="type-img">
+                    <img src="https://images.unsplash.com/photo-1556742502-ec7c0e9f34b1?auto=format&fit=crop&w=640&q=80" alt="固定交付规范示例" />
+                  </div>
+                </article>
+              </div>
+            </section>
+
+            <section class="section">
+              <div class="section-head">
+                <div class="section-title">
+                  <h2>上传训练样本</h2>
+                  <p>建议上传 15 - 30 张样本，保持主体清晰、角度丰富、光线稳定。</p>
+                </div>
+              </div>
+
+              <div class="upload-wrap">
+                <div class="dropzone" id="dropzone">
+                  <div class="upload-inner">
+                    <div class="upload-mark">⇧</div>
+                    <h3>拖拽图片到这里，或点击上传样本</h3>
+                    <p>支持 JPG、PNG、WEBP。可自动检测清晰度、主体一致性和背景干扰。</p>
+                    <button id="uploadBtn" class="primary-btn">上传样本</button>
+                    <input id="fileInput" type="file" accept="image/jpeg,image/png,image/webp" multiple />
+                  </div>
+                </div>
+
+                <aside class="tips-card">
+                  <strong>样本建议</strong>
+                  <ul class="tip-list">
+                    <li><span class="tip-dot"></span>主体清晰，避免严重遮挡</li>
+                    <li><span class="tip-dot"></span>包含正面、侧面、细节角度</li>
+                    <li><span class="tip-dot"></span>光线尽量稳定，避免过曝</li>
+                    <li><span class="tip-dot"></span>背景不要过度复杂</li>
+                    <li><span class="tip-dot"></span>避免低清晰度或压缩严重图片</li>
+                  </ul>
+                </aside>
+              </div>
+            </section>
+
+            <section class="section">
+              <div class="section-head">
+                <div class="section-title">
+                  <h2>样本缩略图</h2>
+                  <p>点击图片查看详情，也可以设为关键样本来提升主体学习权重。</p>
+                </div>
+                <button class="ghost-btn" id="batchCheckBtn">重新检测</button>
+              </div>
+
+              <div class="sample-grid" id="sampleGrid"></div>
+            </section>
+
+            <section class="section">
+              <div class="section-head">
+                <div class="section-title">
+                  <h2>样本质量检测</h2>
+                  <p>系统会从清晰度、一致性、角度、背景干扰等维度判断训练可用性。</p>
+                </div>
+              </div>
+
+              <div class="quality-grid">
+                <div class="quality-card">
+                  <strong>样本清晰度</strong>
+                  <div class="score-row"><span>检测分数</span><b>88%</b></div>
+                  <div class="bar"><span style="width:88%"></span></div>
+                  <p>整体清晰，少量图片可替换为更高清版本。</p>
+                </div>
+
+                <div class="quality-card">
+                  <strong>主体一致性</strong>
+                  <div class="score-row"><span>检测分数</span><b>91%</b></div>
+                  <div class="bar green"><span style="width:91%"></span></div>
+                  <p>主体识别稳定，适合创建固定资产。</p>
+                </div>
+
+                <div class="quality-card">
+                  <strong>角度丰富度</strong>
+                  <div class="score-row"><span>覆盖情况</span><b>76%</b></div>
+                  <div class="bar orange"><span style="width:76%"></span></div>
+                  <p>建议补充侧面、背面和局部细节图。</p>
+                </div>
+
+                <div class="quality-card">
+                  <strong>背景干扰程度</strong>
+                  <div class="score-row"><span>检测状态</span><b>中等</b></div>
+                  <div class="bar orange"><span style="width:64%"></span></div>
+                  <p>部分样本背景较复杂，建议保留主体占比较高图片。</p>
+                </div>
+
+                <div class="quality-card">
+                  <strong>训练可用性判断</strong>
+                  <div class="score-row"><span>综合结果</span><b>适合</b></div>
+                  <div class="bar green"><span style="width:86%"></span></div>
+                  <p>当前样本可以创建训练任务。</p>
+                </div>
+              </div>
+            </section>
+
+            <section class="section">
+              <div class="section-head">
+                <div class="section-title">
+                  <h2>训练配置</h2>
+                  <p>使用产品化配置描述资产用途，不暴露复杂模型参数。</p>
+                </div>
+              </div>
+
+              <div class="config-grid">
+                <div class="field full">
+                  <label for="assetName">资产名称</label>
+                  <input id="assetName" class="text-input" value="护肤精华固定商品资产" />
+                </div>
+
+                <div class="field">
+                  <label>资产用途</label>
+                  <div class="chip-group" data-config="use">
+                    <button class="chip active">商品主图生成</button>
+                    <button class="chip">场景图生成</button>
+                    <button class="chip">营销图生成</button>
+                    <button class="chip">品牌内容统一</button>
+                    <button class="chip">批量素材生产</button>
+                  </div>
+                </div>
+
+                <div class="field">
+                  <label>一致性重点</label>
+                  <div class="chip-group" data-config="focus">
+                    <button class="chip active">商品外观</button>
+                    <button class="chip">材质细节</button>
+                    <button class="chip">模特形象</button>
+                    <button class="chip">品牌色调</button>
+                    <button class="chip">构图规范</button>
+                  </div>
+                </div>
+
+                <div class="field">
+                  <label>适用类目</label>
+                  <div class="chip-group" data-config="category">
+                    <button class="chip active">美妆护肤</button>
+                    <button class="chip">服饰鞋包</button>
+                    <button class="chip">家居生活</button>
+                    <button class="chip">数码产品</button>
+                    <button class="chip">食品饮品</button>
+                  </div>
+                </div>
+
+                <div class="field">
+                  <label>复用范围</label>
+                  <div class="chip-group" data-config="scope">
+                    <button class="chip active">仅本人可用</button>
+                    <button class="chip">团队成员可用</button>
+                    <button class="chip">企业空间可用</button>
+                  </div>
+                </div>
+
+                <div class="field full">
+                  <label>训练完成后</label>
+                  <div class="chip-group" data-config="after">
+                    <button class="chip active">自动加入 LoRA 资产库</button>
+                    <button class="chip">训练完成后通知我</button>
+                    <button class="chip">生成示例效果图</button>
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            <section class="section">
+              <div class="section-head">
+                <div class="section-title">
+                  <h2>示例效果</h2>
+                  <p>训练完成后，可在后续任务中复用资产并保持视觉一致。</p>
+                </div>
+              </div>
+
+              <div class="effect-grid">
+                <article class="effect-card">
+                  <div class="effect-img">
+                    <img src="https://images.unsplash.com/photo-1620916566398-39f1143ab7be?auto=format&fit=crop&w=800&q=80" alt="固定商品多场景复用" />
+                  </div>
+                  <div class="effect-body">
+                    <h3>固定商品多场景复用</h3>
+                    <p>同一商品可快速应用到白底图、场景图和营销图。</p>
+                    <span class="tag">商品一致</span>
+                  </div>
+                </article>
+
+                <article class="effect-card">
+                  <div class="effect-img">
+                    <img src="https://images.unsplash.com/photo-1539109136881-3be0616acf4b?auto=format&fit=crop&w=800&q=80" alt="固定模特多背景复用" />
+                  </div>
+                  <div class="effect-body">
+                    <h3>固定模特多背景复用</h3>
+                    <p>保持模特形象稳定，适合服饰穿搭系列化输出。</p>
+                    <span class="tag">形象稳定</span>
+                  </div>
+                </article>
+
+                <article class="effect-card">
+                  <div class="effect-img">
+                    <img src="https://images.unsplash.com/photo-1490481651871-ab68de25d43d?auto=format&fit=crop&w=800&q=80" alt="品牌风格统一输出" />
+                  </div>
+                  <div class="effect-body">
+                    <h3>品牌风格统一输出</h3>
+                    <p>统一色彩、构图和视觉调性，提升内容识别度。</p>
+                    <span class="tag">风格统一</span>
+                  </div>
+                </article>
+              </div>
+            </section>
+          </div>
+
+          <aside class="right-rail">
+            <section class="rail-card">
+              <h3>训练任务摘要</h3>
+              <div class="summary-list">
+                <div class="summary-item"><span>当前训练类型</span><strong id="summaryType">固定商品主体</strong></div>
+                <div class="summary-item"><span>资产名称</span><strong id="summaryAsset">护肤精华固定商品资产</strong></div>
+                <div class="summary-item"><span>样本数量</span><strong id="summaryCount">18 张</strong></div>
+                <div class="summary-item"><span>样本可用性</span><strong>适合训练</strong></div>
+                <div class="summary-item"><span>预计训练时间</span><strong id="summaryTime">约 25 分钟</strong></div>
+                <div class="summary-item"><span>预计消耗额度</span><strong id="summaryCredit">800 点</strong></div>
+                <div class="summary-item"><span>训练完成后</span><strong id="summaryAfter">加入 LoRA 资产库</strong></div>
+              </div>
+              <button id="createTaskBtn" class="primary-btn">创建训练任务</button>
+            </section>
+
+            <section class="rail-card">
+              <h3>智能助手建议</h3>
+              <div class="assistant-img">
+                <img id="detailImage" src="https://images.unsplash.com/photo-1612817288484-6f916006741a?auto=format&fit=crop&w=640&q=80" alt="智能助手建议样本" />
+              </div>
+              <p id="assistantTip">
+                当前样本主体一致性较好，但角度略少。建议补充 3 - 5 张侧面或细节图，可以提升后续复用稳定性。
+              </p>
+              <button id="checkQualityBtn" class="secondary-btn" style="width:100%">检查样本质量</button>
+            </section>
+
+            <section class="rail-card">
+              <h3>训练流程</h3>
+              <ol class="flow-list">
+                <li><span class="step-num">1</span>上传样本</li>
+                <li><span class="step-num">2</span>样本检测</li>
+                <li><span class="step-num">3</span>创建训练</li>
+                <li><span class="step-num">4</span>返回结果</li>
+                <li><span class="step-num">5</span>上架为资产</li>
+                <li><span class="step-num">6</span>后续任务复用</li>
+              </ol>
+            </section>
+          </aside>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <div class="toast-wrap" id="toastWrap"></div>
+
+  <div class="modal-mask" id="progressModal">
+    <div class="modal">
+      <h3>正在创建 LoRA 训练任务</h3>
+      <p id="modalStep">正在检查样本质量</p>
+      <div class="modal-progress"><span id="modalProgress"></span></div>
+      <div class="modal-actions">
+        <button id="modalOkBtn" class="secondary-btn">知道了</button>
+        <button id="modalAssetBtn" class="primary-btn">查看资产页</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="floating-ai">
+    <button id="aiFab" class="ai-fab">✦ AI 助手</button>
+  </div>
+
+  <div id="aiDrawer" class="ai-drawer">
+    <div class="ai-head">
+      <strong>LoRA 训练助手</strong>
+      <button id="aiClose" class="ai-close">×</button>
+    </div>
+    <div class="ai-body">
+      <div class="ai-message">
+        你好，我可以帮你检查样本是否适合训练，也可以提醒你补充缺失角度或统一样本质量。
+      </div>
+      <div class="quick-actions">
+        <button data-reply="样本清晰度较好，建议补充侧面、背面和局部细节样本。">检查样本质量</button>
+        <button data-reply="当前样本更适合选择「固定商品主体」，后续复用稳定性更高。">推荐训练类型</button>
+        <button data-reply="建议补充 3 - 5 张侧面图、2 张细节图，并删除背景过复杂的样本。">补充样本建议</button>
+        <button data-reply="LoRA 用于沉淀固定商品、固定模特或品牌风格，让后续生成保持一致。">解释 LoRA 用途</button>
+        <button data-reply="训练规范：主体清晰、角度丰富、光线稳定、避免遮挡和低清图片。">查看训练规范</button>
+      </div>
+      <div id="aiReply" class="ai-message" style="display:none"></div>
+      <div class="ai-input-row">
+        <input id="aiInput" placeholder="输入你的问题" />
+        <button id="aiSend">发送</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const sampleImages = [
+      "https://images.unsplash.com/photo-1612817288484-6f916006741a?auto=format&fit=crop&w=640&q=80",
+      "https://images.unsplash.com/photo-1598440947619-2c35fc9aa908?auto=format&fit=crop&w=640&q=80",
+      "https://images.unsplash.com/photo-1620916566398-39f1143ab7be?auto=format&fit=crop&w=640&q=80",
+      "https://images.unsplash.com/photo-1596462502278-27bfdc403348?auto=format&fit=crop&w=640&q=80",
+      "https://images.unsplash.com/photo-1600180758890-6b94519a8ba6?auto=format&fit=crop&w=640&q=80",
+      "https://images.unsplash.com/photo-1603252109303-2751441dd157?auto=format&fit=crop&w=640&q=80",
+      "https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=640&q=80",
+      "https://images.unsplash.com/photo-1567016376408-0226e4d0c1ea?auto=format&fit=crop&w=640&q=80"
+    ];
+
+    const sampleStatus = [
+      "清晰",
+      "角度良好",
+      "清晰",
+      "建议补充",
+      "背景复杂",
+      "角度良好",
+      "清晰",
+      "建议补充"
+    ];
+
+    let selectedType = {
+      name: "固定商品主体",
+      time: "约 25 分钟",
+      credit: "800 点"
+    };
+
+    let samples = sampleImages.map((src, index) => ({
+      id: index + 1,
+      src,
+      status: sampleStatus[index],
+      key: index === 0
+    }));
+
+    const toastWrap = document.getElementById("toastWrap");
+    const sampleGrid = document.getElementById("sampleGrid");
+    const detailImage = document.getElementById("detailImage");
+    const assistantTip = document.getElementById("assistantTip");
+
+    function toast(message) {
+      const item = document.createElement("div");
+      item.className = "toast";
+      item.textContent = message;
+      toastWrap.appendChild(item);
+      setTimeout(() => {
+        item.style.opacity = "0";
+        item.style.transform = "translateY(-8px)";
+        item.style.transition = "all .2s ease";
+      }, 2200);
+      setTimeout(() => item.remove(), 2500);
+    }
+
+    function renderSamples(activeId = 1) {
+      sampleGrid.innerHTML = "";
+      samples.forEach((sample) => {
+        const card = document.createElement("article");
+        const isActive = sample.id === activeId;
+        const isMid = sample.status.includes("建议") || sample.status.includes("背景");
+        card.className = `sample-card ${isActive ? "active" : ""} ${sample.key ? "key" : ""}`;
+        card.dataset.id = sample.id;
+
+        card.innerHTML = `
+          <div class="sample-img">
+            <img src="${sample.src}" alt="训练样本 ${sample.id}">
+          </div>
+          <div class="sample-meta">
+            <div class="sample-row">
+              <strong>样本 ${String(sample.id).padStart(2, "0")}</strong>
+              <span class="status ${isMid ? "mid" : "good"}">${sample.status}</span>
+            </div>
+            <div class="sample-actions">
+              <button class="set-key">${sample.key ? "关键样本" : "设为关键"}</button>
+              <button class="delete">删除</button>
+            </div>
+          </div>
+        `;
+
+        card.addEventListener("click", () => {
+          document.querySelectorAll(".sample-card").forEach((el) => el.classList.remove("active"));
+          card.classList.add("active");
+          detailImage.src = sample.src;
+          assistantTip.textContent = `已选中样本 ${String(sample.id).padStart(2, "0")}。${sample.status === "背景复杂" ? "该样本背景干扰偏高，建议替换为主体占比更高的图片。" : "该样本可用于训练，建议继续保持主体清晰和角度稳定。"}`;
+        });
+
+        card.querySelector(".set-key").addEventListener("click", (event) => {
+          event.stopPropagation();
+          sample.key = !sample.key;
+          renderSamples(sample.id);
+          toast(sample.key ? "已设为关键样本" : "已取消关键样本");
+        });
+
+        card.querySelector(".delete").addEventListener("click", (event) => {
+          event.stopPropagation();
+          toast(`样本 ${String(sample.id).padStart(2, "0")} 已从当前训练中移除`);
+          samples = samples.filter((item) => item.id !== sample.id);
+          updateSummary();
+          renderSamples(samples[0]?.id || 0);
+        });
+
+        sampleGrid.appendChild(card);
+      });
+    }
+
+    function getActiveChip(configName) {
+      const group = document.querySelector(`[data-config="${configName}"]`);
+      return group ? group.querySelector(".chip.active")?.textContent.trim() : "";
+    }
+
+    function updateSummary() {
+      document.getElementById("summaryType").textContent = selectedType.name;
+      document.getElementById("summaryTime").textContent = selectedType.time;
+      document.getElementById("summaryCredit").textContent = selectedType.credit;
+      document.getElementById("summaryCount").textContent = `${Math.max(samples.length + 10, samples.length)} 张`;
+
+      const assetName = document.getElementById("assetName").value.trim() || "未命名 LoRA 资产";
+      document.getElementById("summaryAsset").textContent = assetName;
+
+      const after = getActiveChip("after") || "自动加入 LoRA 资产库";
+      document.getElementById("summaryAfter").textContent =
+        after === "自动加入 LoRA 资产库" ? "加入 LoRA 资产库" : after;
+    }
+
+    document.querySelectorAll(".nav-item").forEach((item) => {
+      item.addEventListener("mouseenter", () => {
+        if (!item.classList.contains("active")) item.style.background = "#f8f8ff";
+      });
+      item.addEventListener("mouseleave", () => {
+        if (!item.classList.contains("active")) item.style.background = "";
+      });
+    });
+
+    document.querySelectorAll(".type-card").forEach((card) => {
+      card.addEventListener("click", () => {
+        document.querySelectorAll(".type-card").forEach((el) => el.classList.remove("active"));
+        card.classList.add("active");
+
+        selectedType = {
+          name: card.dataset.type,
+          time: card.dataset.time,
+          credit: card.dataset.credit
+        };
+
+        const tips = {
+          "固定商品主体": "当前样本主体一致性较好，但角度略少。建议补充 3 - 5 张侧面或细节图，可以提升后续复用稳定性。",
+          "固定模特形象": "模特训练需要保证脸部、发型、服装轮廓稳定。建议补充不同半身和全身角度样本。",
+          "固定品牌风格": "品牌风格训练建议保持色调、构图和画面质感统一，避免混入差异过大的广告图。",
+          "固定交付规范": "交付规范训练建议加入不同客户场景的标准样片，确保构图、留白和画幅一致。"
+        };
+
+        assistantTip.textContent = tips[selectedType.name];
+        updateSummary();
+        toast(`已切换为「${selectedType.name}」`);
+      });
+    });
+
+    document.querySelectorAll(".chip-group").forEach((group) => {
+      group.querySelectorAll(".chip").forEach((chip) => {
+        chip.addEventListener("click", () => {
+          group.querySelectorAll(".chip").forEach((item) => item.classList.remove("active"));
+          chip.classList.add("active");
+          updateSummary();
+          toast(`已选择：${chip.textContent.trim()}`);
+        });
+      });
+    });
+
+    document.getElementById("assetName").addEventListener("input", updateSummary);
+
+    const topSearch = document.getElementById("topSearch");
+    topSearch.addEventListener("keydown", (event) => {
+      if (event.key === "Enter") {
+        const keyword = topSearch.value.trim();
+        toast(keyword ? `正在搜索：${keyword}` : "请输入搜索关键词");
+      }
+    });
+
+    document.getElementById("noticeBtn").addEventListener("click", () => {
+      toast("暂无新的训练通知");
+    });
+
+    document.getElementById("saveDraftBtn").addEventListener("click", () => {
+      toast("草稿已保存，可稍后继续创建训练");
+    });
+
+    document.getElementById("specBtn").addEventListener("click", () => {
+      toast("训练规范：主体清晰、角度丰富、光线稳定、避免严重遮挡");
+    });
+
+    document.getElementById("batchCheckBtn").addEventListener("click", () => {
+      toast("样本质量已重新检测，当前样本适合创建训练任务");
+    });
+
+    document.getElementById("checkQualityBtn").addEventListener("click", () => {
+      toast("检测完成：清晰度 88%，主体一致性 91%，建议补充更多侧面图");
+    });
+
+    const uploadBtn = document.getElementById("uploadBtn");
+    const fileInput = document.getElementById("fileInput");
+    const dropzone = document.getElementById("dropzone");
+
+    uploadBtn.addEventListener("click", () => fileInput.click());
+
+    fileInput.addEventListener("change", (event) => {
+      const files = Array.from(event.target.files || []);
+      if (!files.length) return;
+
+      files.slice(0, 6).forEach((file) => {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          const nextId = samples.length ? Math.max(...samples.map((item) => item.id)) + 1 : 1;
+          samples.unshift({
+            id: nextId,
+            src: e.target.result,
+            status: "清晰",
+            key: false
+          });
+          renderSamples(nextId);
+          updateSummary();
+        };
+        reader.readAsDataURL(file);
+      });
+
+      toast(`已上传 ${files.length} 张样本图片`);
+      fileInput.value = "";
+    });
+
+    ["dragenter", "dragover"].forEach((name) => {
+      dropzone.addEventListener(name, (event) => {
+        event.preventDefault();
+        dropzone.classList.add("dragover");
+      });
+    });
+
+    ["dragleave", "drop"].forEach((name) => {
+      dropzone.addEventListener(name, (event) => {
+        event.preventDefault();
+        dropzone.classList.remove("dragover");
+      });
+    });
+
+    dropzone.addEventListener("drop", (event) => {
+      const files = Array.from(event.dataTransfer.files || []).filter((file) =>
+        ["image/jpeg", "image/png", "image/webp"].includes(file.type)
+      );
+
+      if (!files.length) {
+        toast("请上传 JPG、PNG 或 WEBP 图片");
+        return;
+      }
+
+      files.slice(0, 6).forEach((file) => {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          const nextId = samples.length ? Math.max(...samples.map((item) => item.id)) + 1 : 1;
+          samples.unshift({
+            id: nextId,
+            src: e.target.result,
+            status: "清晰",
+            key: false
+          });
+          renderSamples(nextId);
+          updateSummary();
+        };
+        reader.readAsDataURL(file);
+      });
+
+      toast(`拖拽上传成功：${files.length} 张图片`);
+    });
+
+    const progressModal = document.getElementById("progressModal");
+    const modalProgress = document.getElementById("modalProgress");
+    const modalStep = document.getElementById("modalStep");
+    const modalOkBtn = document.getElementById("modalOkBtn");
+    const modalAssetBtn = document.getElementById("modalAssetBtn");
+
+    function openProgressModal() {
+      const steps = [
+        "正在检查样本质量",
+        "正在整理训练配置",
+        "正在创建资产任务",
+        "任务已创建，可在 LoRA 资产页查看"
+      ];
+
+      let index = 0;
+      progressModal.classList.add("show");
+      modalProgress.style.width = "0%";
+      modalStep.textContent = steps[0];
+
+      const timer = setInterval(() => {
+        index += 1;
+        const percent = Math.min(index * 34, 100);
+        modalProgress.style.width = `${percent}%`;
+        modalStep.textContent = steps[Math.min(index, steps.length - 1)];
+
+        if (percent >= 100) {
+          clearInterval(timer);
+          toast("LoRA 训练任务已创建");
+        }
+      }, 650);
+    }
+
+    document.getElementById("createTaskBtn").addEventListener("click", openProgressModal);
+    document.getElementById("topCreateBtn").addEventListener("click", openProgressModal);
+
+    modalOkBtn.addEventListener("click", () => {
+      progressModal.classList.remove("show");
+    });
+
+    modalAssetBtn.addEventListener("click", () => {
+      progressModal.classList.remove("show");
+      toast("已跳转到 LoRA 资产页预览状态");
+    });
+
+    progressModal.addEventListener("click", (event) => {
+      if (event.target === progressModal) {
+        progressModal.classList.remove("show");
+      }
+    });
+
+    const aiFab = document.getElementById("aiFab");
+    const aiDrawer = document.getElementById("aiDrawer");
+    const aiClose = document.getElementById("aiClose");
+    const aiReply = document.getElementById("aiReply");
+    const aiInput = document.getElementById("aiInput");
+    const aiSend = document.getElementById("aiSend");
+
+    aiFab.addEventListener("click", () => {
+      aiDrawer.classList.toggle("show");
+    });
+
+    aiClose.addEventListener("click", () => {
+      aiDrawer.classList.remove("show");
+    });
+
+    document.querySelectorAll(".quick-actions button").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        aiReply.style.display = "block";
+        aiReply.textContent = btn.dataset.reply;
+      });
+    });
+
+    aiSend.addEventListener("click", () => {
+      const value = aiInput.value.trim();
+      aiReply.style.display = "block";
+      aiReply.textContent = value
+        ? `已收到你的问题：「${value}」。建议先检查样本角度覆盖，再确认资产用途和复用范围。`
+        : "可以输入你想检查的样本问题，例如：这些图片是否适合训练固定商品？";
+      aiInput.value = "";
+    });
+
+    aiInput.addEventListener("keydown", (event) => {
+      if (event.key === "Enter") {
+        aiSend.click();
+      }
+    });
+
+    renderSamples(1);
+    updateSummary();
+</script>
+  <script src="../assets/js/mock.js"></script>
+  <script src="../assets/js/app.js"></script>
+</body>
+</html>

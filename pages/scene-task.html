@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI 电商多模态设计平台 - 场景化任务</title>
+  <style>
+    :root{--sidebar:220px;--topbar:68px;--bg:#f6f8fc;--card:#fff;--text:#111827;--muted:#64748b;--light:#94a3b8;--border:#e7ebf3;--line:#eef2f7;--primary:#5b6cff;--primary-2:#7c4dff;--shadow:0 12px 28px rgba(15,23,42,.06);--radius:20px;--radius-lg:24px}*{box-sizing:border-box;margin:0;padding:0}html,body{min-height:100%;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",Arial,sans-serif}button,input{font-family:inherit}button{border:0;cursor:pointer}a{color:inherit;text-decoration:none}.sidebar{position:fixed;left:0;top:0;z-index:60;width:var(--sidebar);height:100vh;padding:18px 14px;background:rgba(255,255,255,.94);border-right:1px solid var(--border);display:flex;flex-direction:column}.brand{display:flex;align-items:center;gap:10px;padding:2px 8px 18px;border-bottom:1px solid var(--line)}.brand-logo{width:38px;height:38px;border-radius:14px;display:grid;place-items:center;color:#fff;font-weight:900;background:linear-gradient(135deg,var(--primary),var(--primary-2));box-shadow:0 10px 22px rgba(91,108,255,.28)}.brand strong{display:block;font-size:14px;line-height:1.2}.brand span{display:block;margin-top:2px;font-size:11px;color:var(--light)}.nav{padding-top:18px;display:grid;gap:7px}.nav-title{padding:0 10px 4px;font-size:11px;color:#a3adbd;font-weight:800;letter-spacing:.08em}.nav-item{height:42px;display:flex;align-items:center;gap:10px;padding:0 11px;border-radius:14px;color:#475569;font-size:13px;font-weight:700;transition:.2s ease}.nav-item:hover{color:var(--primary);background:#f1f4ff;transform:translateX(2px)}.nav-item.active{color:#fff;background:linear-gradient(135deg,var(--primary),var(--primary-2));box-shadow:0 12px 26px rgba(91,108,255,.24)}.nav-icon{width:26px;height:26px;border-radius:10px;display:grid;place-items:center;background:rgba(91,108,255,.09);color:var(--primary);font-size:13px;flex-shrink:0}.nav-item.active .nav-icon{background:rgba(255,255,255,.18);color:#fff}.sidebar-bottom{margin-top:auto;display:grid;gap:8px}.mini-plan{padding:13px;border-radius:18px;background:#f8faff;border:1px solid var(--border)}.mini-plan strong{display:block;font-size:13px;margin-bottom:8px}.mini-bar{height:7px;border-radius:999px;background:#e9edf6;overflow:hidden}.mini-bar span{display:block;width:62%;height:100%;border-radius:inherit;background:linear-gradient(135deg,var(--primary),var(--primary-2))}.mini-plan p{margin-top:7px;color:var(--muted);font-size:11px;line-height:1.5}.topbar{position:fixed;top:0;left:var(--sidebar);right:0;z-index:50;height:var(--topbar);padding:0 22px;background:rgba(246,248,252,.88);backdrop-filter:blur(18px);border-bottom:1px solid rgba(231,235,243,.95);display:flex;align-items:center;gap:16px}.crumb{width:180px;flex-shrink:0}.crumb span{display:block;color:var(--light);font-size:12px}.crumb strong{display:block;color:#0f172a;font-size:17px;line-height:1.15}.search{width:min(360px,30vw);height:40px;display:flex;align-items:center;gap:8px;padding:0 13px;border:1px solid var(--border);border-radius:999px;background:rgba(255,255,255,.92)}.search input{width:100%;border:0;outline:none;background:transparent;color:var(--text);font-size:13px}.top-actions{margin-left:auto;display:flex;align-items:center;gap:12px}.quota-pill{height:38px;padding:0 14px;border-radius:999px;background:#f3f2ff;color:var(--primary);border:1px solid #e5e6ff;font-size:12px;font-weight:800;display:inline-flex;align-items:center}.icon-btn{width:42px;height:42px;border-radius:14px;background:#fff;border:1px solid var(--border);box-shadow:var(--shadow)}.create-btn{min-width:118px;height:48px;padding:0 18px;border-radius:16px;color:#fff;background:linear-gradient(135deg,var(--primary),var(--primary-2));box-shadow:0 14px 26px rgba(91,108,255,.22);font-weight:800}.avatar{width:42px;height:42px;border-radius:14px;overflow:hidden;box-shadow:0 10px 24px rgba(15,23,42,.12)}.avatar img{width:100%;height:100%;object-fit:cover;display:block}.main{margin-left:var(--sidebar);padding:calc(var(--topbar) + 28px) 28px 30px}.layout{display:grid;grid-template-columns:minmax(0,1fr) 320px;gap:16px;align-items:start}.left{min-width:0;display:grid;gap:16px}.right{display:grid;gap:16px}.card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius-lg);box-shadow:var(--shadow)}.hero{min-height:190px;padding:28px;display:flex;align-items:center;justify-content:space-between;gap:24px;background:radial-gradient(circle at 18% 12%,rgba(91,108,255,.08),transparent 28%),radial-gradient(circle at 86% 18%,rgba(124,77,255,.08),transparent 30%),#fff}.tag{display:inline-flex;align-items:center;gap:8px;min-height:30px;padding:0 12px;border-radius:999px;background:#f3f2ff;color:var(--primary);border:1px solid #e4e6ff;font-size:12px;font-weight:800}.hero h1{margin-top:10px;font-size:34px;line-height:1.15;letter-spacing:-.03em}.hero p{margin-top:10px;max-width:700px;color:var(--muted);font-size:13px;line-height:1.7}.hero-actions{margin-top:18px;display:flex;gap:12px;flex-wrap:wrap}.primary-btn,.secondary-btn,.full-btn{min-height:46px;padding:0 18px;border-radius:16px;font-weight:800}.primary-btn,.full-btn{color:#fff;background:linear-gradient(135deg,var(--primary),var(--primary-2));box-shadow:0 14px 26px rgba(91,108,255,.22)}.secondary-btn{color:#0f172a;background:#fff;border:1px solid var(--border)}.hero-visual{width:280px;display:grid;grid-template-columns:1fr .92fr;gap:12px}.hero-panel{height:178px;border-radius:22px;overflow:hidden;border:4px solid rgba(255,255,255,.88);box-shadow:0 20px 34px rgba(15,23,42,.12)}.hero-panel.small{margin-top:44px;height:136px}.hero-panel img{width:100%;height:100%;object-fit:cover;display:block}.section{padding:24px}.section-head{display:flex;justify-content:space-between;align-items:flex-end;gap:12px;margin-bottom:14px}.section-head h2{font-size:18px;letter-spacing:-.2px}.section-head p{margin-top:4px;color:var(--muted);font-size:12px}.summary-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}.summary-card{padding:16px;border-radius:20px;border:1px solid var(--border);background:#fff}.summary-card strong{display:block;font-size:36px;line-height:1;letter-spacing:-.04em;color:#0f172a;font-weight:900;margin-top:12px}.summary-card span{display:block;color:var(--muted);font-size:12px;margin-top:8px}.task-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}.task-card{padding:18px;border-radius:20px;border:1px solid var(--border);background:#fff}.task-icon{width:42px;height:42px;border-radius:14px;display:grid;place-items:center;color:var(--primary);background:rgba(91,108,255,.09);font-size:18px}.task-card h3{margin-top:14px;font-size:16px}.task-card p{margin-top:8px;color:var(--muted);font-size:12px;line-height:1.7}.step-list{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}.step-card{padding:16px;border-radius:20px;border:1px solid var(--border);background:#fff}.step-num{display:inline-flex;width:28px;height:28px;border-radius:999px;align-items:center;justify-content:center;background:#f3f2ff;color:var(--primary);font-weight:800;font-size:12px}.step-card strong{display:block;margin-top:12px;font-size:14px}.step-card p{margin-top:8px;color:var(--muted);font-size:12px;line-height:1.7}.right-card{padding:20px;border-radius:24px}.right-card h3{font-size:15px;margin-bottom:14px}.right-cover{height:156px;overflow:hidden;border-radius:18px;margin-bottom:14px}.right-cover img{width:100%;height:100%;object-fit:cover;display:block}.summary-list{display:grid;gap:10px}.summary-row{display:flex;justify-content:space-between;gap:12px;color:var(--muted);font-size:13px}.summary-row strong{color:#0f172a;text-align:right}@media (max-width:1280px){.layout{grid-template-columns:1fr}.summary-grid,.task-grid,.step-list{grid-template-columns:repeat(2,minmax(0,1fr))}}</style>
+  <link rel="stylesheet" href="../assets/css/common.css" />
+  <link rel="stylesheet" href="../assets/css/workspace-shell.css" />
+</head>
+<body>
+  <aside class="sidebar">
+    <div class="brand"><div class="brand-logo">AI</div><div><strong>AI 电商多模态设计平台</strong><span>商用素材工作台</span></div></div>
+    <nav class="nav">
+      <div class="nav-title">工作区</div>
+      <a class="nav-item" href="dashboard.html"><span class="nav-icon">⌂</span>控制台</a>
+      <a class="nav-item active" href="scene-task.html"><span class="nav-icon">✦</span>场景化任务</a>
+      <a class="nav-item" href="material-library.html"><span class="nav-icon">▧</span>素材库</a>
+      <a class="nav-item" href="assistant.html"><span class="nav-icon">⌁</span>智能助手</a>
+      <a class="nav-item" href="lora-assets.html"><span class="nav-icon">◇</span>LoRA 资产</a>
+      <a class="nav-item" href="api-control.html"><span class="nav-icon">⌘</span>API 控制台</a>
+    </nav>
+    <div class="sidebar-bottom"><nav class="nav"><div class="nav-title">账户</div><a class="nav-item" href="member-center.html"><span class="nav-icon">★</span>会员中心</a><a class="nav-item" href="settings.html"><span class="nav-icon">⚙</span>设置</a><a class="nav-item" href="marketing.html"><span class="nav-icon">?</span>帮助中心</a></nav><div class="mini-plan"><strong>专业版套餐</strong><div class="mini-bar"><span></span></div><p>本月已用 3,420 点，剩余 6,580 点，可继续用于图像生成、素材下载和 LoRA 训练。</p></div></div>
+  </aside>
+  <header class="topbar"><div class="crumb"><span>工作台 / V1 主链路</span><strong>场景化任务</strong></div><label class="search"><span>⌕</span><input type="text" placeholder="搜索任务、模板、素材" /></label><div class="top-actions"><div class="quota-pill">专业版 · 剩余额度 6,580 点</div><button class="icon-btn">◔</button><button class="create-btn" id="createTaskBtn">创建任务</button><div class="avatar"><img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=120&q=80" alt="头像" /></div></div></header>
+  <main class="main">
+    <div class="layout">
+      <div class="left">
+        <section class="card hero">
+          <div>
+            <div class="tag">V1 场景化任务主链路</div>
+            <h1>把电商高频任务封装成可执行、可导出、可复用的标准流程</h1>
+            <p>文档要求的核心不是复杂参数，而是让大众商家能围绕“做什么”完成少量配置，最终获得稳定可交付结果。当前阶段优先收束三类高频场景。</p>
+            <div class="hero-actions"><button class="primary-btn" id="heroCreateBtn">新建场景化任务</button><button class="secondary-btn" id="exampleBtn">查看场景示例</button></div>
+          </div>
+          <div class="hero-visual"><div class="hero-panel"><img src="https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?auto=format&fit=crop&w=700&q=80" alt="主图示例" /></div><div class="hero-panel small"><img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=420&q=80" alt="场景图示例" /></div></div>
+        </section>
+        <div id="sceneTaskStatusMount"></div>
+        <section class="card section">
+          <div class="section-head"><div><h2>主链路闭环</h2><p>任务进入 -> 素材上传 -> 场景化配置 -> 一键生成 -> 结果选择/必要时修复 -> 导出交付 -> 归档复用</p></div></div>
+          <div class="step-list">
+            <div class="step-card"><span class="step-num">1</span><strong>任务进入</strong><p>选择场景类型，明确输出目标与交付预期。</p></div>
+            <div class="step-card"><span class="step-num">2</span><strong>上传素材</strong><p>提交商品图，系统提示素材规范与主体要求。</p></div>
+            <div class="step-card"><span class="step-num">3</span><strong>场景配置</strong><p>用少量选择项完成输出比例、场景模板和风格配置。</p></div>
+            <div class="step-card"><span class="step-num">4</span><strong>结果交付</strong><p>支持结果选择、导出、归档和后续复用。</p></div>
+          </div>
+        </section>
+        <section class="card section">
+          <div class="section-head"><div><h2>V1 三大首发场景</h2><p>与文档一致，先聚焦三类高频、低门槛、结果可快速验收的场景。</p></div></div>
+          <div class="task-grid">
+            <article class="task-card" data-task-key="product-main"><div class="task-icon">▤</div><h3>服饰 / 商品上新主图</h3><p>满足新品上架、活动测款、日常经营中的主图生产需求。</p></article>
+            <article class="task-card" data-task-key="background-migration"><div class="task-icon">◐</div><h3>一键换背景 / 场景迁移</h3><p>保留商品主体，替换高质感背景，快速适配不同投放场景。</p></article>
+            <article class="task-card" data-task-key="white-background"><div class="task-icon">□</div><h3>转平铺 / 白底标准化</h3><p>生成标准化商品展示图，支持货架、详情页和基础投放。</p></article>
+          </div>
+        </section>
+        <section class="card section">
+          <div class="section-head"><div><h2>结果要求</h2><p>平台需要关注首图成功率、主体保真、一次性可用率和导出率。</p></div></div>
+          <div class="summary-grid">
+            <article class="summary-card"><span>首图成功率</span><strong>高</strong><span>输出结果需稳定可用，减少重复生成。</span></article>
+            <article class="summary-card"><span>主体保真</span><strong>强</strong><span>商品主体、结构和材质需要尽量保持真实。</span></article>
+            <article class="summary-card"><span>一次性可用</span><strong>优先</strong><span>系统要减少试错，不依赖复杂 prompt。</span></article>
+            <article class="summary-card"><span>导出交付</span><strong>必备</strong><span>结果可直接下载并归档到素材库复用。</span></article>
+          </div>
+        </section>
+      </div>
+      <aside class="right">
+        <section class="card right-card"><h3>当前任务摘要</h3><div class="right-cover"><img src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=640&q=80" alt="任务摘要" /></div><div class="summary-list"><div class="summary-row"><span>任务类型</span><strong id="sceneTaskName">商品上新主图</strong></div><div class="summary-row"><span>推荐输出数量</span><strong id="sceneTaskCount">4 张</strong></div><div class="summary-row"><span>推荐输出比例</span><strong id="sceneTaskRatio">1:1 / 3:4</strong></div><div class="summary-row"><span>预计消耗额度</span><strong id="sceneTaskQuota">约 280 点</strong></div><div class="summary-row"><span>当前状态</span><strong id="sceneTaskStatusText">待创建</strong></div></div><div style="margin-top:14px"><button class="full-btn" id="uploadTopBtn">进入上传图片</button></div></section>
+        <section class="card right-card"><h3>结果保障</h3><div class="right-cover"><img src="https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&w=640&q=80" alt="结果保障" /></div><p style="color:var(--muted);font-size:12px;line-height:1.7;">结果页需要提供必要时修复、再次生成、导出与归档能力，保证用户完成一次标准化交付闭环。</p></section>
+        <section class="card right-card"><h3>下一步</h3><div class="summary-list"><div class="summary-row"><span>上传素材后</span><strong>进入场景化配置</strong></div><div class="summary-row"><span>生成后</span><strong>查看结果并导出</strong></div><div class="summary-row"><span>完成后</span><strong>归档复用</strong></div></div></section>
+      </aside>
+    </div>
+  </main>
+  <script src="../assets/js/mock.js"></script>
+  <script src="../assets/js/app.js"></script>
+</body>
+</html>

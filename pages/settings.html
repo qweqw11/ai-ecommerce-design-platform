@@ -1,0 +1,918 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI 电商多模态设计平台 - 设置</title>
+  <style>
+    :root {
+      --sidebar: 220px;
+      --topbar: 68px;
+      --bg: #f6f8fc;
+      --card: #ffffff;
+      --text: #111827;
+      --muted: #64748b;
+      --light: #94a3b8;
+      --border: #e7ebf3;
+      --line: #eef2f7;
+      --primary: #5b6cff;
+      --primary-2: #7c4dff;
+      --success: #10b981;
+      --warning: #f59e0b;
+      --danger: #ef4444;
+      --shadow: 0 12px 28px rgba(15, 23, 42, 0.06);
+      --radius: 20px;
+      --radius-lg: 24px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html,
+    body {
+      min-height: 100%;
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", Arial, sans-serif;
+    }
+
+    button,
+    input,
+    textarea,
+    select {
+      font-family: inherit;
+    }
+
+    button {
+      border: 0;
+      cursor: pointer;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .sidebar {
+      position: fixed;
+      left: 0;
+      top: 0;
+      z-index: 60;
+      width: var(--sidebar);
+      height: 100vh;
+      padding: 18px 14px;
+      background: rgba(255, 255, 255, 0.94);
+      border-right: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 2px 8px 18px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .brand-logo {
+      width: 38px;
+      height: 38px;
+      border-radius: 14px;
+      display: grid;
+      place-items: center;
+      color: #fff;
+      font-weight: 900;
+      background: linear-gradient(135deg, var(--primary), var(--primary-2));
+      box-shadow: 0 10px 22px rgba(91, 108, 255, 0.28);
+    }
+
+    .brand strong {
+      display: block;
+      font-size: 14px;
+      line-height: 1.2;
+    }
+
+    .brand span {
+      display: block;
+      margin-top: 2px;
+      font-size: 11px;
+      color: var(--light);
+    }
+
+    .nav {
+      padding-top: 18px;
+      display: grid;
+      gap: 7px;
+    }
+
+    .nav-title {
+      padding: 0 10px 4px;
+      font-size: 11px;
+      color: #a3adbd;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+    }
+
+    .nav-item {
+      height: 42px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 0 11px;
+      border-radius: 14px;
+      color: #475569;
+      font-size: 13px;
+      font-weight: 700;
+      transition: 0.2s ease;
+    }
+
+    .nav-item:hover {
+      color: var(--primary);
+      background: #f1f4ff;
+      transform: translateX(2px);
+    }
+
+    .nav-item.active {
+      color: #fff;
+      background: linear-gradient(135deg, var(--primary), var(--primary-2));
+      box-shadow: 0 12px 26px rgba(91, 108, 255, 0.24);
+    }
+
+    .nav-icon {
+      width: 26px;
+      height: 26px;
+      border-radius: 10px;
+      display: grid;
+      place-items: center;
+      background: rgba(91, 108, 255, 0.09);
+      color: var(--primary);
+      font-size: 13px;
+      flex-shrink: 0;
+    }
+
+    .nav-item.active .nav-icon {
+      background: rgba(255, 255, 255, 0.18);
+      color: #fff;
+    }
+
+    .sidebar-bottom {
+      margin-top: auto;
+      display: grid;
+      gap: 8px;
+    }
+
+    .mini-plan {
+      padding: 13px;
+      border-radius: 18px;
+      background: #f8faff;
+      border: 1px solid var(--border);
+    }
+
+    .mini-plan strong {
+      display: block;
+      font-size: 13px;
+      margin-bottom: 8px;
+    }
+
+    .mini-bar {
+      height: 7px;
+      border-radius: 999px;
+      background: #e9edf6;
+      overflow: hidden;
+    }
+
+    .mini-bar span {
+      display: block;
+      width: 62%;
+      height: 100%;
+      border-radius: inherit;
+      background: linear-gradient(135deg, var(--primary), var(--primary-2));
+    }
+
+    .mini-plan p {
+      margin-top: 7px;
+      color: var(--muted);
+      font-size: 11px;
+      line-height: 1.5;
+    }
+
+    .topbar {
+      position: fixed;
+      top: 0;
+      left: var(--sidebar);
+      right: 0;
+      z-index: 50;
+      height: var(--topbar);
+      padding: 0 22px;
+      background: rgba(246, 248, 252, 0.88);
+      backdrop-filter: blur(18px);
+      border-bottom: 1px solid rgba(231, 235, 243, 0.95);
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .crumb {
+      width: 180px;
+      flex-shrink: 0;
+    }
+
+    .crumb span {
+      display: block;
+      color: var(--light);
+      font-size: 12px;
+    }
+
+    .crumb strong {
+      display: block;
+      color: #0f172a;
+      font-size: 17px;
+      line-height: 1.15;
+    }
+
+    .search {
+      width: min(360px, 30vw);
+      height: 40px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 0 13px;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.92);
+    }
+
+    .search input {
+      width: 100%;
+      border: 0;
+      outline: none;
+      background: transparent;
+      color: var(--text);
+      font-size: 13px;
+    }
+
+    .top-actions {
+      margin-left: auto;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .quota-pill {
+      height: 38px;
+      padding: 0 14px;
+      border-radius: 999px;
+      background: #f3f2ff;
+      color: var(--primary);
+      border: 1px solid #e5e6ff;
+      font-size: 12px;
+      font-weight: 800;
+      display: inline-flex;
+      align-items: center;
+    }
+
+    .icon-btn {
+      width: 42px;
+      height: 42px;
+      border-radius: 14px;
+      background: #fff;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+    }
+
+    .create-btn {
+      min-width: 118px;
+      height: 48px;
+      padding: 0 18px;
+      border-radius: 16px;
+      color: #fff;
+      background: linear-gradient(135deg, var(--primary), var(--primary-2));
+      box-shadow: 0 14px 26px rgba(91, 108, 255, 0.22);
+      font-weight: 800;
+    }
+
+    .avatar {
+      width: 42px;
+      height: 42px;
+      border-radius: 14px;
+      overflow: hidden;
+      box-shadow: 0 10px 24px rgba(15, 23, 42, 0.12);
+    }
+
+    .avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .main {
+      margin-left: var(--sidebar);
+      padding: calc(var(--topbar) + 28px) 28px 30px;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 320px;
+      gap: 16px;
+      align-items: start;
+    }
+
+    .left {
+      min-width: 0;
+      display: grid;
+      gap: 16px;
+    }
+
+    .right {
+      display: grid;
+      gap: 16px;
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow);
+    }
+
+    .hero {
+      min-height: 190px;
+      padding: 28px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      background:
+        radial-gradient(circle at 18% 12%, rgba(91, 108, 255, 0.08), transparent 28%),
+        radial-gradient(circle at 86% 18%, rgba(124, 77, 255, 0.08), transparent 30%),
+        #ffffff;
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      min-height: 30px;
+      padding: 0 12px;
+      border-radius: 999px;
+      background: #f3f2ff;
+      color: var(--primary);
+      border: 1px solid #e4e6ff;
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .hero h1 {
+      margin-top: 10px;
+      font-size: 34px;
+      line-height: 1.15;
+      letter-spacing: -0.03em;
+    }
+
+    .hero p {
+      margin-top: 10px;
+      max-width: 700px;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.7;
+    }
+
+    .hero-actions {
+      margin-top: 18px;
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .primary-btn,
+    .secondary-btn,
+    .full-btn {
+      min-height: 46px;
+      padding: 0 18px;
+      border-radius: 16px;
+      font-weight: 800;
+    }
+
+    .primary-btn,
+    .full-btn {
+      color: #fff;
+      background: linear-gradient(135deg, var(--primary), var(--primary-2));
+      box-shadow: 0 14px 26px rgba(91, 108, 255, 0.22);
+    }
+
+    .secondary-btn {
+      color: #0f172a;
+      background: #fff;
+      border: 1px solid var(--border);
+    }
+
+    .hero-visual {
+      width: 280px;
+      display: grid;
+      grid-template-columns: 1fr 0.92fr;
+      gap: 12px;
+    }
+
+    .hero-panel {
+      height: 178px;
+      border-radius: 22px;
+      overflow: hidden;
+      border: 4px solid rgba(255, 255, 255, 0.88);
+      box-shadow: 0 20px 34px rgba(15, 23, 42, 0.12);
+    }
+
+    .hero-panel.small {
+      margin-top: 44px;
+      height: 136px;
+    }
+
+    .hero-panel img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .section {
+      padding: 24px;
+    }
+
+    .section-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+
+    .section-head h2 {
+      font-size: 18px;
+      letter-spacing: -0.2px;
+    }
+
+    .section-head p {
+      margin-top: 4px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .setting-group {
+      display: grid;
+      gap: 14px;
+    }
+
+    .setting-card {
+      padding: 18px;
+      border-radius: 20px;
+      border: 1px solid var(--border);
+      background: #fff;
+    }
+
+    .setting-top {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: start;
+      margin-bottom: 14px;
+    }
+
+    .setting-top h3 {
+      font-size: 16px;
+      color: #0f172a;
+    }
+
+    .setting-top p {
+      margin-top: 6px;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.7;
+    }
+
+    .field-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .field {
+      display: grid;
+      gap: 8px;
+    }
+
+    .field label {
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .field input,
+    .field textarea,
+    .field select {
+      width: 100%;
+      min-height: 44px;
+      padding: 0 14px;
+      border-radius: 14px;
+      border: 1px solid var(--border);
+      background: #fff;
+      color: var(--text);
+      font-size: 13px;
+      outline: none;
+    }
+
+    .field textarea {
+      min-height: 96px;
+      padding: 12px 14px;
+      resize: vertical;
+    }
+
+    .switch-list {
+      display: grid;
+      gap: 12px;
+    }
+
+    .switch-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      align-items: center;
+      padding: 14px 0;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .switch-row:last-child {
+      border-bottom: 0;
+      padding-bottom: 0;
+    }
+
+    .switch-copy strong {
+      display: block;
+      font-size: 14px;
+      color: #0f172a;
+    }
+
+    .switch-copy p {
+      margin-top: 5px;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.7;
+    }
+
+    .toggle {
+      position: relative;
+      width: 52px;
+      height: 30px;
+      border-radius: 999px;
+      background: #dbe2f1;
+      flex-shrink: 0;
+    }
+
+    .toggle::after {
+      content: "";
+      position: absolute;
+      top: 4px;
+      left: 4px;
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: #fff;
+      box-shadow: 0 4px 12px rgba(15, 23, 42, 0.12);
+    }
+
+    .toggle.active {
+      background: linear-gradient(135deg, var(--primary), var(--primary-2));
+    }
+
+    .toggle.active::after {
+      left: 26px;
+    }
+
+    .device-list,
+    .summary-list {
+      display: grid;
+      gap: 10px;
+    }
+
+    .device-item,
+    .summary-item {
+      padding: 12px 14px;
+      border-radius: 16px;
+      border: 1px solid var(--border);
+      background: #f8faff;
+    }
+
+    .device-item strong,
+    .summary-item strong {
+      display: block;
+      font-size: 13px;
+      color: #0f172a;
+    }
+
+    .device-item span,
+    .summary-item span {
+      display: block;
+      margin-top: 5px;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.7;
+    }
+
+    .right-card {
+      padding: 20px;
+      border-radius: 24px;
+    }
+
+    .right-card h3 {
+      font-size: 15px;
+      margin-bottom: 14px;
+    }
+
+    .right-cover {
+      height: 156px;
+      overflow: hidden;
+      border-radius: 18px;
+      margin-bottom: 14px;
+    }
+
+    .right-cover img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .action-stack {
+      display: grid;
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    @media (max-width: 1280px) {
+      .layout {
+        grid-template-columns: 1fr;
+      }
+
+      .field-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+  <link rel="stylesheet" href="../assets/css/common.css" />
+  <link rel="stylesheet" href="../assets/css/workspace-shell.css" />
+</head>
+<body>
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="brand-logo">AI</div>
+      <div>
+        <strong>AI 电商多模态设计平台</strong>
+        <span>商用素材工作台</span>
+      </div>
+    </div>
+
+    <nav class="nav">
+      <div class="nav-title">工作区</div>
+      <a class="nav-item" href="dashboard.html"><span class="nav-icon">⌂</span>控制台</a>
+      <a class="nav-item" href="scene-task.html"><span class="nav-icon">✦</span>场景化任务</a>
+      <a class="nav-item" href="material-library.html"><span class="nav-icon">▧</span>素材库</a>
+      <a class="nav-item" href="assistant.html"><span class="nav-icon">⌁</span>智能助手</a>
+      <a class="nav-item" href="lora-assets.html"><span class="nav-icon">◇</span>LoRA 资产</a>
+      <a class="nav-item" href="api-control.html"><span class="nav-icon">⌘</span>API 控制台</a>
+    </nav>
+
+    <div class="sidebar-bottom">
+      <nav class="nav">
+        <div class="nav-title">账户</div>
+        <a class="nav-item" href="member-center.html"><span class="nav-icon">★</span>会员中心</a>
+        <a class="nav-item active" href="settings.html"><span class="nav-icon">⚙</span>设置</a>
+        <a class="nav-item" href="marketing.html"><span class="nav-icon">?</span>帮助中心</a>
+      </nav>
+
+      <div class="mini-plan">
+        <strong>专业版套餐</strong>
+        <div class="mini-bar"><span></span></div>
+        <p>本月已用 3,420 点，剩余 6,580 点，可继续用于图像生成、素材下载和 LoRA 训练。</p>
+      </div>
+    </div>
+  </aside>
+
+  <header class="topbar">
+    <div class="crumb">
+      <span>工作台 / 账户中心</span>
+      <strong>设置</strong>
+    </div>
+
+    <label class="search">
+      <span>⌕</span>
+      <input type="text" placeholder="搜索账号、安全、通知、偏好设置" />
+    </label>
+
+    <div class="top-actions">
+      <div class="quota-pill">专业版 · 剩余额度 6,580 点</div>
+      <button class="icon-btn" title="通知">◔</button>
+      <button class="create-btn">保存全部</button>
+      <div class="avatar">
+        <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=120&q=80" alt="用户头像" />
+      </div>
+    </div>
+  </header>
+
+  <main class="main">
+    <div class="layout">
+      <div class="left">
+        <section class="card hero">
+          <div>
+            <div class="tag">账号、安全与使用偏好</div>
+            <h1>把平台设置做得像真实 SaaS 一样清晰可控</h1>
+            <p>设置页参考创作平台常见结构，优先呈现账号资料、安全策略、通知开关、团队与默认生成偏好。这样用户在首次接入后，可以很快形成稳定工作流。</p>
+            <div class="hero-actions">
+              <button class="primary-btn">保存设置</button>
+              <button class="secondary-btn">恢复默认</button>
+            </div>
+          </div>
+
+          <div class="hero-visual">
+            <div class="hero-panel">
+              <img src="https://images.unsplash.com/photo-1516321165247-4aa89a48be28?auto=format&fit=crop&w=600&q=80" alt="设置页展示" />
+            </div>
+            <div class="hero-panel small">
+              <img src="https://images.unsplash.com/photo-1558655146-9f40138edfeb?auto=format&fit=crop&w=420&q=80" alt="安全控制展示" />
+            </div>
+          </div>
+        </section>
+
+        <section class="card section">
+          <div class="section-head">
+            <div>
+              <h2>账号资料</h2>
+              <p>保持品牌信息、团队名称和默认交付资料一致，方便素材和结果统一落库。</p>
+            </div>
+          </div>
+
+          <div class="setting-group">
+            <article class="setting-card">
+              <div class="field-grid">
+                <div class="field">
+                  <label>团队名称</label>
+                  <input value="示例电商设计团队" />
+                </div>
+                <div class="field">
+                  <label>联系人邮箱</label>
+                  <input value="design@example.com" />
+                </div>
+                <div class="field">
+                  <label>默认品牌名称</label>
+                  <input value="Glow Commerce" />
+                </div>
+                <div class="field">
+                  <label>默认交付目录</label>
+                  <select>
+                    <option>品牌主库 / 本月投放</option>
+                    <option>新品项目 / 结果图</option>
+                    <option>团队共享 / 模板沉淀</option>
+                  </select>
+                </div>
+                <div class="field" style="grid-column: 1 / -1;">
+                  <label>品牌说明</label>
+                  <textarea>默认输出更偏向干净、明亮、适合电商上新的商品视觉风格，优先保留主体边缘和品牌调性一致性。</textarea>
+                </div>
+              </div>
+            </article>
+          </div>
+        </section>
+
+        <section class="card section">
+          <div class="section-head">
+            <div>
+              <h2>安全与登录</h2>
+              <p>创作平台里这部分通常决定账号可信度，尤其涉及团队协作、发票和商用授权时更重要。</p>
+            </div>
+          </div>
+
+          <div class="setting-group">
+            <article class="setting-card">
+              <div class="setting-top">
+                <div>
+                  <h3>密码与双重验证</h3>
+                  <p>管理密码、登录提醒和异常设备验证，降低团队账号共享带来的风险。</p>
+                </div>
+                <button class="secondary-btn">修改密码</button>
+              </div>
+
+              <div class="switch-list">
+                <div class="switch-row">
+                  <div class="switch-copy">
+                    <strong>开启短信二次验证</strong>
+                    <p>登录新设备或导出高价值资产时，要求短信验证。</p>
+                  </div>
+                  <div class="toggle active"></div>
+                </div>
+                <div class="switch-row">
+                  <div class="switch-copy">
+                    <strong>异地登录提醒</strong>
+                    <p>当检测到非常用城市或非常用设备时，立即通过邮箱通知。</p>
+                  </div>
+                  <div class="toggle active"></div>
+                </div>
+                <div class="switch-row">
+                  <div class="switch-copy">
+                    <strong>高风险操作确认</strong>
+                    <p>删除素材库、禁用 LoRA 资产或导出整包结果时再次确认。</p>
+                  </div>
+                  <div class="toggle active"></div>
+                </div>
+              </div>
+            </article>
+          </div>
+        </section>
+
+        <section class="card section">
+          <div class="section-head">
+            <div>
+              <h2>通知与工作流偏好</h2>
+              <p>这部分参考设计/生成类产品的常见做法，让任务消息和默认生成习惯都可配置。</p>
+            </div>
+          </div>
+
+          <div class="setting-group">
+            <article class="setting-card">
+              <div class="switch-list">
+                <div class="switch-row">
+                  <div class="switch-copy">
+                    <strong>任务完成通知</strong>
+                    <p>生成结果完成、LoRA 训练结束、批量导出完成时推送通知。</p>
+                  </div>
+                  <div class="toggle active"></div>
+                </div>
+                <div class="switch-row">
+                  <div class="switch-copy">
+                    <strong>额度不足提醒</strong>
+                    <p>当剩余额度低于 20% 时，自动提示升级或购买扩容包。</p>
+                  </div>
+                  <div class="toggle active"></div>
+                </div>
+                <div class="switch-row">
+                  <div class="switch-copy">
+                    <strong>默认高清导出</strong>
+                    <p>下载结果图时默认选择高清版本，适用于投放与详情页素材交付。</p>
+                  </div>
+                  <div class="toggle"></div>
+                </div>
+                <div class="switch-row">
+                  <div class="switch-copy">
+                    <strong>自动保存到素材库</strong>
+                    <p>将评分较高的生成结果自动沉淀到团队素材库，便于后续复用。</p>
+                  </div>
+                  <div class="toggle active"></div>
+                </div>
+              </div>
+            </article>
+          </div>
+        </section>
+      </div>
+
+      <aside class="right">
+        <section class="card right-card">
+          <h3>账号健康度</h3>
+          <div class="right-cover">
+            <img src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=640&q=80" alt="账号健康度" />
+          </div>
+          <div class="summary-list">
+            <div class="summary-item"><strong>资料完整度 92%</strong><span>建议补充品牌说明和团队角色，方便后续协作管理。</span></div>
+            <div class="summary-item"><strong>安全等级 高</strong><span>双重验证和异地提醒均已开启，当前安全策略较稳定。</span></div>
+            <div class="summary-item"><strong>默认工作流 已配置</strong><span>生成结果将优先归档到“品牌主库 / 本月投放”。</span></div>
+          </div>
+          <div class="action-stack">
+            <button class="full-btn">立即保存全部设置</button>
+          </div>
+        </section>
+
+        <section class="card right-card">
+          <h3>最近登录设备</h3>
+          <div class="device-list">
+            <div class="device-item">
+              <strong>Windows · Chrome</strong>
+              <span>上海 · 今天 10:24 · 当前设备</span>
+            </div>
+            <div class="device-item">
+              <strong>macOS · Safari</strong>
+              <span>杭州 · 昨天 19:42</span>
+            </div>
+            <div class="device-item">
+              <strong>iPhone · 微信内网页</strong>
+              <span>上海 · 05-03 09:18</span>
+            </div>
+          </div>
+        </section>
+      </aside>
+    </div>
+  </main>
+
+  <script src="../assets/js/mock.js"></script>
+  <script src="../assets/js/app.js"></script>
+</body>
+</html>

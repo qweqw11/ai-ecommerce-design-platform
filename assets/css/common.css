@@ -1,0 +1,137 @@
+:root {
+  --platform-primary: #2962ff;
+  --platform-primary-soft: rgba(41, 98, 255, 0.12);
+  --platform-accent: #14b8a6;
+  --platform-text: #152033;
+  --platform-muted: #64748b;
+  --platform-line: rgba(148, 163, 184, 0.24);
+  --platform-panel: rgba(255, 255, 255, 0.94);
+  --platform-shadow: 0 22px 55px rgba(15, 23, 42, 0.16);
+}
+
+.platform-dock {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  z-index: 1200;
+  width: min(320px, calc(100vw - 28px));
+  padding: 16px;
+  border: 1px solid var(--platform-line);
+  border-radius: 22px;
+  color: var(--platform-text);
+  background: var(--platform-panel);
+  box-shadow: var(--platform-shadow);
+  backdrop-filter: blur(18px);
+}
+
+.platform-dock[data-page-kind="marketing"] {
+  top: 18px;
+  right: 18px;
+  bottom: auto;
+}
+
+.platform-dock-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.platform-dock-title {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.platform-dock-title strong {
+  font-size: 14px;
+  line-height: 1.2;
+}
+
+.platform-dock-title span {
+  color: var(--platform-muted);
+  font-size: 12px;
+}
+
+.platform-user {
+  font-size: 12px;
+  color: var(--platform-muted);
+  white-space: nowrap;
+}
+
+.platform-flow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 14px;
+}
+
+.platform-flow a,
+.platform-flow button,
+.platform-shortcuts a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 36px;
+  padding: 0 12px;
+  border-radius: 12px;
+  font: inherit;
+  text-decoration: none;
+}
+
+.platform-flow a,
+.platform-shortcuts a {
+  color: var(--platform-text);
+  border: 1px solid var(--platform-line);
+  background: #fff;
+}
+
+.platform-flow .primary-link {
+  color: #fff;
+  background: linear-gradient(135deg, var(--platform-primary), #5b7cff);
+  border-color: transparent;
+}
+
+.platform-shortcuts {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.platform-dock-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-top: 14px;
+  padding-top: 12px;
+  border-top: 1px solid var(--platform-line);
+}
+
+.platform-exit {
+  border: 0;
+  background: transparent;
+  color: #ef4444;
+  cursor: pointer;
+  font: inherit;
+  padding: 0;
+}
+
+.platform-status {
+  color: var(--platform-muted);
+  font-size: 12px;
+}
+
+@media (max-width: 768px) {
+  .platform-dock {
+    left: 14px;
+    right: 14px;
+    bottom: 14px;
+    width: auto;
+  }
+
+  .platform-shortcuts {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}

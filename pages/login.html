@@ -1,0 +1,827 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI 电商多模态设计平台 - 登录</title>
+  <style>
+    :root {
+      --bg: #f6f8fc;
+      --card: #ffffff;
+      --text: #111827;
+      --muted: #64748b;
+      --light: #94a3b8;
+      --border: #e7ebf3;
+      --line: #eef2f7;
+      --primary: #5b6cff;
+      --primary-2: #7c4dff;
+      --danger: #ef4444;
+      --shadow: 0 20px 55px rgba(15, 23, 42, 0.08);
+      --hover-shadow: 0 22px 55px rgba(91, 108, 255, 0.16);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html,
+    body {
+      width: 100%;
+      min-height: 100%;
+      overflow-x: hidden;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC",
+        "Microsoft YaHei", Arial, sans-serif;
+      background:
+        radial-gradient(circle at 18% 12%, rgba(91, 108, 255, 0.10), transparent 28%),
+        radial-gradient(circle at 86% 18%, rgba(124, 77, 255, 0.08), transparent 30%),
+        var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+    }
+
+    img {
+      width: 100%;
+      height: 100%;
+      display: block;
+      object-fit: cover;
+    }
+
+    button,
+    input {
+      font-family: inherit;
+    }
+
+    button {
+      border: 0;
+      cursor: pointer;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .page {
+      width: 100%;
+      min-height: 100vh;
+      padding: 24px 34px;
+      display: grid;
+      grid-template-rows: 56px minmax(0, 1fr) 28px;
+      gap: 16px;
+    }
+
+    .topbar {
+      width: 100%;
+      max-width: 1180px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .logo {
+      width: 40px;
+      height: 40px;
+      border-radius: 15px;
+      display: grid;
+      place-items: center;
+      color: #fff;
+      font-weight: 900;
+      background: linear-gradient(135deg, var(--primary), var(--primary-2));
+      box-shadow: 0 12px 26px rgba(91, 108, 255, 0.26);
+    }
+
+    .brand-text strong {
+      display: block;
+      color: #0f172a;
+      font-size: 15px;
+      line-height: 1.2;
+    }
+
+    .brand-text span {
+      display: block;
+      margin-top: 3px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .home-btn {
+      height: 40px;
+      padding: 0 16px;
+      border-radius: 999px;
+      color: #334155;
+      background: rgba(255, 255, 255, 0.78);
+      border: 1px solid var(--border);
+      font-size: 13px;
+      font-weight: 900;
+      box-shadow: 0 10px 24px rgba(15, 23, 42, 0.05);
+      transition: 0.22s ease;
+      white-space: nowrap;
+    }
+
+    .home-btn:hover {
+      color: var(--primary);
+      border-color: rgba(91, 108, 255, 0.32);
+      transform: translateY(-2px);
+    }
+
+    .main {
+      width: 100%;
+      max-width: 1180px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 440px;
+      gap: 48px;
+      align-items: center;
+      min-height: 0;
+    }
+
+    .left {
+      min-width: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .intro-card {
+      width: 100%;
+      max-width: 520px;
+      padding: 24px;
+      border-radius: 28px;
+      background: rgba(255, 255, 255, 0.68);
+      border: 1px solid rgba(231, 235, 243, 0.9);
+      box-shadow: 0 16px 42px rgba(15, 23, 42, 0.06);
+      backdrop-filter: blur(18px);
+    }
+
+    .intro-copy {
+      margin-bottom: 18px;
+    }
+
+    .intro-tag {
+      display: inline-flex;
+      align-items: center;
+      height: 28px;
+      padding: 0 11px;
+      border-radius: 999px;
+      color: var(--primary);
+      background: rgba(91, 108, 255, 0.08);
+      border: 1px solid rgba(91, 108, 255, 0.16);
+      font-size: 12px;
+      font-weight: 900;
+      margin-bottom: 12px;
+    }
+
+    .intro-copy h1 {
+      max-width: 420px;
+      font-size: 28px;
+      line-height: 1.25;
+      letter-spacing: -0.8px;
+      color: #0f172a;
+      margin-bottom: 10px;
+    }
+
+    .intro-copy p {
+      max-width: 440px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .visual {
+      position: relative;
+      height: 315px;
+      border-radius: 24px;
+      overflow: hidden;
+      border: 5px solid #fff;
+      box-shadow: 0 18px 42px rgba(15, 23, 42, 0.10);
+      background: #fff;
+    }
+
+    .visual-panel {
+      position: absolute;
+      left: 16px;
+      right: 16px;
+      bottom: 16px;
+      z-index: 2;
+      padding: 13px 14px;
+      border-radius: 18px;
+      background: rgba(255, 255, 255, 0.90);
+      backdrop-filter: blur(14px);
+      border: 1px solid rgba(231, 235, 243, 0.9);
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .visual-panel strong {
+      display: block;
+      color: #0f172a;
+      font-size: 13px;
+    }
+
+    .visual-panel span {
+      display: block;
+      color: var(--muted);
+      font-size: 12px;
+      margin-top: 2px;
+    }
+
+    .mini-badge {
+      flex-shrink: 0;
+      padding: 6px 9px;
+      border-radius: 999px;
+      color: var(--primary);
+      background: rgba(91, 108, 255, 0.10);
+      font-size: 12px;
+      font-weight: 900;
+    }
+
+    .form-wrap {
+      display: flex;
+      justify-content: center;
+      min-width: 0;
+    }
+
+    .form-card {
+      width: 100%;
+      max-width: 440px;
+      padding: 28px;
+      border-radius: 28px;
+      background: rgba(255, 255, 255, 0.96);
+      border: 1px solid rgba(231, 235, 243, 0.95);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(18px);
+    }
+
+    .form-head {
+      margin-bottom: 20px;
+    }
+
+    .form-head h2 {
+      color: #0f172a;
+      font-size: 26px;
+      letter-spacing: -0.6px;
+      margin-bottom: 5px;
+    }
+
+    .form-head p {
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .tabs {
+      height: 42px;
+      padding: 4px;
+      border-radius: 999px;
+      background: #f1f4fa;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4px;
+      margin-bottom: 18px;
+    }
+
+    .tab {
+      border-radius: 999px;
+      color: #64748b;
+      background: transparent;
+      font-size: 13px;
+      font-weight: 900;
+      transition: 0.22s ease;
+    }
+
+    .tab.active {
+      color: #fff;
+      background: linear-gradient(135deg, var(--primary), var(--primary-2));
+      box-shadow: 0 10px 22px rgba(91, 108, 255, 0.22);
+    }
+
+    .form {
+      display: none;
+    }
+
+    .form.active {
+      display: block;
+    }
+
+    .form-grid {
+      display: grid;
+      gap: 12px;
+    }
+
+    .field {
+      display: grid;
+      gap: 6px;
+    }
+
+    .field label {
+      color: #334155;
+      font-size: 12px;
+      font-weight: 900;
+    }
+
+    .input-wrap {
+      height: 45px;
+      display: flex;
+      align-items: center;
+      border: 1px solid var(--border);
+      border-radius: 15px;
+      background: #fff;
+      padding: 0 12px;
+      transition: 0.2s ease;
+    }
+
+    .input-wrap:focus-within {
+      border-color: rgba(91, 108, 255, 0.65);
+      box-shadow: 0 0 0 4px rgba(91, 108, 255, 0.10);
+    }
+
+    .input-wrap input {
+      width: 100%;
+      height: 100%;
+      border: 0;
+      outline: 0;
+      color: #0f172a;
+      background: transparent;
+      font-size: 13px;
+    }
+
+    .input-wrap input::placeholder {
+      color: #a4adbd;
+    }
+
+    .toggle-pwd,
+    .code-btn {
+      flex-shrink: 0;
+      color: var(--primary);
+      background: transparent;
+      font-size: 12px;
+      font-weight: 900;
+      padding-left: 8px;
+      white-space: nowrap;
+    }
+
+    .form-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin: 2px 0 4px;
+    }
+
+    .check {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      color: var(--muted);
+      font-size: 12px;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .check input {
+      width: 14px;
+      height: 14px;
+      accent-color: var(--primary);
+    }
+
+    .forgot {
+      color: var(--primary);
+      font-size: 12px;
+      font-weight: 900;
+    }
+
+    .submit-btn {
+      width: 100%;
+      height: 46px;
+      border-radius: 999px;
+      color: #fff;
+      background: linear-gradient(135deg, var(--primary), var(--primary-2));
+      font-size: 14px;
+      font-weight: 900;
+      box-shadow: 0 14px 30px rgba(91, 108, 255, 0.28);
+      transition: 0.22s ease;
+      margin-top: 4px;
+    }
+
+    .submit-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 18px 38px rgba(91, 108, 255, 0.34);
+    }
+
+    .divider {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      color: var(--light);
+      font-size: 12px;
+      margin: 18px 0 14px;
+    }
+
+    .divider::before,
+    .divider::after {
+      content: "";
+      height: 1px;
+      background: var(--line);
+      flex: 1;
+    }
+
+    .third-party {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 9px;
+    }
+
+    .third-btn {
+      height: 40px;
+      border-radius: 14px;
+      color: #334155;
+      background: #fff;
+      border: 1px solid var(--border);
+      font-size: 12px;
+      font-weight: 900;
+      transition: 0.2s ease;
+    }
+
+    .third-btn:hover {
+      color: var(--primary);
+      border-color: rgba(91, 108, 255, 0.32);
+      transform: translateY(-2px);
+      box-shadow: 0 12px 24px rgba(91, 108, 255, 0.10);
+    }
+
+    .form-note {
+      margin-top: 14px;
+      padding: 12px;
+      border-radius: 18px;
+      background: #f8faff;
+      border: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .footer {
+      width: 100%;
+      max-width: 1180px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      color: var(--light);
+      font-size: 12px;
+    }
+
+    .toast {
+      position: fixed;
+      left: 50%;
+      bottom: 30px;
+      z-index: 300;
+      min-width: 300px;
+      max-width: 520px;
+      padding: 13px 16px;
+      border-radius: 16px;
+      color: #fff;
+      background: rgba(15, 23, 42, 0.94);
+      box-shadow: 0 22px 55px rgba(15, 23, 42, 0.24);
+      transform: translate(-50%, 22px);
+      opacity: 0;
+      pointer-events: none;
+      transition: 0.24s ease;
+      text-align: center;
+      font-size: 13px;
+      font-weight: 800;
+    }
+
+    .toast.show {
+      transform: translate(-50%, 0);
+      opacity: 1;
+    }
+
+    @media (max-width: 980px) {
+      .page {
+        min-height: auto;
+        padding: 18px;
+        grid-template-rows: auto auto auto;
+      }
+
+      .main {
+        grid-template-columns: 1fr;
+        gap: 24px;
+      }
+
+      .left {
+        display: none;
+      }
+
+      .form-card {
+        max-width: 100%;
+      }
+
+      .footer {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .third-party {
+        grid-template-columns: 1fr;
+      }
+    }
+</style>
+  <link rel="stylesheet" href="../assets/css/common.css" />
+</head>
+
+<body>
+  <div class="page">
+    <header class="topbar">
+      <a class="brand" href="javascript:void(0)">
+        <div class="logo">AI</div>
+        <div class="brand-text">
+          <strong>AI 电商多模态设计平台</strong>
+          <span>商用素材生产工作台</span>
+        </div>
+      </a>
+
+      <button class="home-btn" id="backHome">返回首页</button>
+    </header>
+
+    <main class="main">
+      <section class="left">
+        <div class="intro-card">
+          <div class="intro-copy">
+            <div class="intro-tag">AI 电商视觉素材生产平台</div>
+            <h1>登录后继续管理你的商品视觉素材</h1>
+            <p>
+              统一管理商品图、场景图、营销图、素材库与 LoRA 资产，
+              让电商素材生产更稳定、更高效。
+            </p>
+          </div>
+
+          <div class="visual">
+            <img src="https://images.unsplash.com/photo-1620916566398-39f1143ab7be?auto=format&fit=crop&w=900&q=85" alt="护肤品电商视觉素材" />
+            <div class="visual-panel">
+              <div>
+                <strong>商品场景图已生成</strong>
+                <span>结果已归档到素材库，可继续优化</span>
+              </div>
+              <div class="mini-badge">4 张结果</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="form-wrap">
+        <div class="form-card">
+          <div class="form-head">
+            <h2 id="formTitle">欢迎回来</h2>
+            <p id="formSubtitle">继续管理你的电商视觉素材</p>
+          </div>
+
+          <div class="tabs">
+            <button class="tab active" data-tab="login">登录</button>
+            <button class="tab" data-tab="register">注册</button>
+          </div>
+
+          <form class="form active" id="loginForm" novalidate>
+            <div class="form-grid">
+              <div class="field">
+                <label for="loginAccount">邮箱 / 手机号</label>
+                <div class="input-wrap">
+                  <input id="loginAccount" type="text" placeholder="请输入邮箱或手机号" />
+                </div>
+              </div>
+
+              <div class="field">
+                <label for="loginPassword">密码</label>
+                <div class="input-wrap">
+                  <input id="loginPassword" type="password" placeholder="请输入密码" />
+                  <button class="toggle-pwd" type="button" data-target="loginPassword">显示</button>
+                </div>
+              </div>
+
+              <div class="form-row">
+                <label class="check">
+                  <input type="checkbox" checked />
+                  记住我
+                </label>
+                <a class="forgot" href="javascript:void(0)" id="forgotPwd">忘记密码</a>
+              </div>
+
+              <button class="submit-btn" type="submit">进入工作台</button>
+            </div>
+          </form>
+
+          <form class="form" id="registerForm" novalidate>
+            <div class="form-grid">
+              <div class="field">
+                <label for="registerAccount">邮箱 / 手机号</label>
+                <div class="input-wrap">
+                  <input id="registerAccount" type="text" placeholder="请输入邮箱或手机号" />
+                </div>
+              </div>
+
+              <div class="field">
+                <label for="verifyCode">验证码</label>
+                <div class="input-wrap">
+                  <input id="verifyCode" type="text" placeholder="请输入验证码" />
+                  <button class="code-btn" type="button" id="sendCode">获取验证码</button>
+                </div>
+              </div>
+
+              <div class="field">
+                <label for="registerPassword">密码</label>
+                <div class="input-wrap">
+                  <input id="registerPassword" type="password" placeholder="设置登录密码" />
+                  <button class="toggle-pwd" type="button" data-target="registerPassword">显示</button>
+                </div>
+              </div>
+
+              <div class="field">
+                <label for="confirmPassword">确认密码</label>
+                <div class="input-wrap">
+                  <input id="confirmPassword" type="password" placeholder="请再次输入密码" />
+                  <button class="toggle-pwd" type="button" data-target="confirmPassword">显示</button>
+                </div>
+              </div>
+
+              <div class="field">
+                <label for="companyName">店铺 / 公司名称</label>
+                <div class="input-wrap">
+                  <input id="companyName" type="text" placeholder="例如：品牌旗舰店 / 视觉工作室" />
+                </div>
+              </div>
+
+              <label class="check">
+                <input id="agree" type="checkbox" />
+                我已阅读并同意服务协议与素材使用规范
+              </label>
+
+              <button class="submit-btn" type="submit">创建免费账号</button>
+            </div>
+          </form>
+
+          <div class="divider">或使用以下方式继续</div>
+
+          <div class="third-party">
+            <button class="third-btn" data-third="微信登录">微信登录</button>
+            <button class="third-btn" data-third="企业微信">企业微信</button>
+            <button class="third-btn" data-third="飞书登录">飞书登录</button>
+          </div>
+
+          <div class="form-note">
+            注册即可获得免费体验额度，支持创建场景化任务、保存素材和使用智能助手。
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <span>© 2026 AI 电商多模态设计平台. All rights reserved.</span>
+      <span>隐私政策 · 服务协议 · 商用规范</span>
+    </footer>
+  </div>
+
+  <div class="toast" id="toast">操作已完成</div>
+
+  <script>
+    const toast = document.getElementById("toast");
+    const tabs = document.querySelectorAll(".tab");
+    const loginForm = document.getElementById("loginForm");
+    const registerForm = document.getElementById("registerForm");
+    const formTitle = document.getElementById("formTitle");
+    const formSubtitle = document.getElementById("formSubtitle");
+    let toastTimer = null;
+
+    function showToast(message) {
+      toast.textContent = message;
+      toast.classList.add("show");
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => {
+        toast.classList.remove("show");
+      }, 2200);
+    }
+
+    function switchTab(type) {
+      tabs.forEach((tab) => {
+        tab.classList.toggle("active", tab.dataset.tab === type);
+      });
+
+      loginForm.classList.toggle("active", type === "login");
+      registerForm.classList.toggle("active", type === "register");
+
+      if (type === "login") {
+        formTitle.textContent = "欢迎回来";
+        formSubtitle.textContent = "继续管理你的电商视觉素材";
+      } else {
+        formTitle.textContent = "创建免费账号";
+        formSubtitle.textContent = "开通体验额度，开始生成商用素材";
+      }
+    }
+
+    tabs.forEach((tab) => {
+      tab.addEventListener("click", () => switchTab(tab.dataset.tab));
+    });
+
+    document.querySelectorAll(".toggle-pwd").forEach((button) => {
+      button.addEventListener("click", () => {
+        const input = document.getElementById(button.dataset.target);
+        const isPassword = input.type === "password";
+        input.type = isPassword ? "text" : "password";
+        button.textContent = isPassword ? "隐藏" : "显示";
+      });
+    });
+
+    loginForm.addEventListener("submit", (event) => {
+      event.preventDefault();
+
+      const account = document.getElementById("loginAccount").value.trim();
+      const password = document.getElementById("loginPassword").value.trim();
+
+      if (!account) {
+        showToast("请输入邮箱或手机号");
+        return;
+      }
+
+      if (!password) {
+        showToast("请输入密码");
+        return;
+      }
+
+      showToast("登录成功，正在进入工作台");
+    });
+
+    registerForm.addEventListener("submit", (event) => {
+      event.preventDefault();
+
+      const account = document.getElementById("registerAccount").value.trim();
+      const code = document.getElementById("verifyCode").value.trim();
+      const password = document.getElementById("registerPassword").value.trim();
+      const confirmPassword = document.getElementById("confirmPassword").value.trim();
+      const agree = document.getElementById("agree").checked;
+
+      if (!account) {
+        showToast("请输入邮箱或手机号");
+        return;
+      }
+
+      if (!code) {
+        showToast("请输入验证码");
+        return;
+      }
+
+      if (!password) {
+        showToast("请输入密码");
+        return;
+      }
+
+      if (password !== confirmPassword) {
+        showToast("两次输入的密码不一致");
+        return;
+      }
+
+      if (!agree) {
+        showToast("请先阅读并同意服务协议");
+        return;
+      }
+
+      showToast("注册成功，已为你开通免费体验额度");
+    });
+
+    document.getElementById("sendCode").addEventListener("click", () => {
+      const account = document.getElementById("registerAccount").value.trim();
+      if (!account) {
+        showToast("请输入邮箱或手机号");
+        return;
+      }
+      showToast("验证码已发送，请注意查收");
+    });
+
+    document.getElementById("forgotPwd").addEventListener("click", () => {
+      showToast("已进入密码找回流程");
+    });
+
+    document.getElementById("backHome").addEventListener("click", () => {
+      showToast("正在返回平台官网首页");
+    });
+
+    document.querySelectorAll(".third-btn").forEach((button) => {
+      button.addEventListener("click", () => {
+        showToast(`${button.dataset.third}入口已打开`);
+      });
+    });
+</script>
+  <script src="../assets/js/mock.js"></script>
+  <script src="../assets/js/app.js"></script>
+</body>
+</html>

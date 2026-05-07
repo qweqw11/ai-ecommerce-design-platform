@@ -1,0 +1,934 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI 电商多模态设计平台 - 会员中心</title>
+  <style>
+    :root {
+      --sidebar: 220px;
+      --topbar: 68px;
+      --bg: #f6f8fc;
+      --card: #ffffff;
+      --text: #111827;
+      --muted: #64748b;
+      --light: #94a3b8;
+      --border: #e7ebf3;
+      --line: #eef2f7;
+      --primary: #5b6cff;
+      --primary-2: #7c4dff;
+      --success: #10b981;
+      --warning: #f59e0b;
+      --shadow: 0 12px 28px rgba(15, 23, 42, 0.06);
+      --radius: 20px;
+      --radius-lg: 24px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html,
+    body {
+      min-height: 100%;
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", Arial, sans-serif;
+    }
+
+    button,
+    input {
+      font-family: inherit;
+    }
+
+    button {
+      border: 0;
+      cursor: pointer;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .sidebar {
+      position: fixed;
+      left: 0;
+      top: 0;
+      z-index: 60;
+      width: var(--sidebar);
+      height: 100vh;
+      padding: 18px 14px;
+      background: rgba(255, 255, 255, 0.94);
+      border-right: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 2px 8px 18px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .brand-logo {
+      width: 38px;
+      height: 38px;
+      border-radius: 14px;
+      display: grid;
+      place-items: center;
+      color: #fff;
+      font-weight: 900;
+      background: linear-gradient(135deg, var(--primary), var(--primary-2));
+      box-shadow: 0 10px 22px rgba(91, 108, 255, 0.28);
+    }
+
+    .brand strong {
+      display: block;
+      font-size: 14px;
+      line-height: 1.2;
+    }
+
+    .brand span {
+      display: block;
+      margin-top: 2px;
+      font-size: 11px;
+      color: var(--light);
+    }
+
+    .nav {
+      padding-top: 18px;
+      display: grid;
+      gap: 7px;
+    }
+
+    .nav-title {
+      padding: 0 10px 4px;
+      font-size: 11px;
+      color: #a3adbd;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+    }
+
+    .nav-item {
+      height: 42px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 0 11px;
+      border-radius: 14px;
+      color: #475569;
+      font-size: 13px;
+      font-weight: 700;
+      transition: 0.2s ease;
+    }
+
+    .nav-item:hover {
+      color: var(--primary);
+      background: #f1f4ff;
+      transform: translateX(2px);
+    }
+
+    .nav-item.active {
+      color: #fff;
+      background: linear-gradient(135deg, var(--primary), var(--primary-2));
+      box-shadow: 0 12px 26px rgba(91, 108, 255, 0.24);
+    }
+
+    .nav-icon {
+      width: 26px;
+      height: 26px;
+      border-radius: 10px;
+      display: grid;
+      place-items: center;
+      background: rgba(91, 108, 255, 0.09);
+      color: var(--primary);
+      font-size: 13px;
+      flex-shrink: 0;
+    }
+
+    .nav-item.active .nav-icon {
+      background: rgba(255, 255, 255, 0.18);
+      color: #fff;
+    }
+
+    .sidebar-bottom {
+      margin-top: auto;
+      display: grid;
+      gap: 8px;
+    }
+
+    .mini-plan {
+      padding: 13px;
+      border-radius: 18px;
+      background: #f8faff;
+      border: 1px solid var(--border);
+    }
+
+    .mini-plan strong {
+      display: block;
+      font-size: 13px;
+      margin-bottom: 8px;
+    }
+
+    .mini-bar {
+      height: 7px;
+      border-radius: 999px;
+      background: #e9edf6;
+      overflow: hidden;
+    }
+
+    .mini-bar span {
+      display: block;
+      width: 62%;
+      height: 100%;
+      border-radius: inherit;
+      background: linear-gradient(135deg, var(--primary), var(--primary-2));
+    }
+
+    .mini-plan p {
+      margin-top: 7px;
+      color: var(--muted);
+      font-size: 11px;
+      line-height: 1.5;
+    }
+
+    .topbar {
+      position: fixed;
+      top: 0;
+      left: var(--sidebar);
+      right: 0;
+      z-index: 50;
+      height: var(--topbar);
+      padding: 0 22px;
+      background: rgba(246, 248, 252, 0.88);
+      backdrop-filter: blur(18px);
+      border-bottom: 1px solid rgba(231, 235, 243, 0.95);
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .crumb {
+      width: 180px;
+      flex-shrink: 0;
+    }
+
+    .crumb span {
+      display: block;
+      color: var(--light);
+      font-size: 12px;
+    }
+
+    .crumb strong {
+      display: block;
+      color: #0f172a;
+      font-size: 17px;
+      line-height: 1.15;
+    }
+
+    .search {
+      width: min(360px, 30vw);
+      height: 40px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 0 13px;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.92);
+    }
+
+    .search input {
+      width: 100%;
+      border: 0;
+      outline: none;
+      background: transparent;
+      color: var(--text);
+      font-size: 13px;
+    }
+
+    .top-actions {
+      margin-left: auto;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .quota-pill {
+      height: 38px;
+      padding: 0 14px;
+      border-radius: 999px;
+      background: #f3f2ff;
+      color: var(--primary);
+      border: 1px solid #e5e6ff;
+      font-size: 12px;
+      font-weight: 800;
+      display: inline-flex;
+      align-items: center;
+    }
+
+    .icon-btn {
+      width: 42px;
+      height: 42px;
+      border-radius: 14px;
+      background: #fff;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+    }
+
+    .create-btn {
+      min-width: 118px;
+      height: 48px;
+      padding: 0 18px;
+      border-radius: 16px;
+      color: #fff;
+      background: linear-gradient(135deg, var(--primary), var(--primary-2));
+      box-shadow: 0 14px 26px rgba(91, 108, 255, 0.22);
+      font-weight: 800;
+    }
+
+    .avatar {
+      width: 42px;
+      height: 42px;
+      border-radius: 14px;
+      overflow: hidden;
+      box-shadow: 0 10px 24px rgba(15, 23, 42, 0.12);
+    }
+
+    .avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .main {
+      margin-left: var(--sidebar);
+      padding: calc(var(--topbar) + 28px) 28px 30px;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 320px;
+      gap: 16px;
+      align-items: start;
+    }
+
+    .left {
+      min-width: 0;
+      display: grid;
+      gap: 16px;
+    }
+
+    .right {
+      display: grid;
+      gap: 16px;
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow);
+    }
+
+    .hero {
+      min-height: 190px;
+      padding: 28px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      background:
+        radial-gradient(circle at 18% 12%, rgba(91, 108, 255, 0.08), transparent 28%),
+        radial-gradient(circle at 86% 18%, rgba(124, 77, 255, 0.08), transparent 30%),
+        #ffffff;
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      min-height: 30px;
+      padding: 0 12px;
+      border-radius: 999px;
+      background: #f3f2ff;
+      color: var(--primary);
+      border: 1px solid #e4e6ff;
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .hero h1 {
+      margin-top: 10px;
+      font-size: 34px;
+      line-height: 1.15;
+      letter-spacing: -0.03em;
+    }
+
+    .hero p {
+      margin-top: 10px;
+      max-width: 700px;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.7;
+    }
+
+    .hero-actions {
+      margin-top: 18px;
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .primary-btn,
+    .secondary-btn,
+    .full-btn {
+      min-height: 46px;
+      padding: 0 18px;
+      border-radius: 16px;
+      font-weight: 800;
+    }
+
+    .primary-btn,
+    .full-btn {
+      color: #fff;
+      background: linear-gradient(135deg, var(--primary), var(--primary-2));
+      box-shadow: 0 14px 26px rgba(91, 108, 255, 0.22);
+    }
+
+    .secondary-btn {
+      color: #0f172a;
+      background: #fff;
+      border: 1px solid var(--border);
+    }
+
+    .hero-visual {
+      width: 280px;
+      display: grid;
+      grid-template-columns: 1fr 0.92fr;
+      gap: 12px;
+    }
+
+    .hero-panel {
+      height: 178px;
+      border-radius: 22px;
+      overflow: hidden;
+      border: 4px solid rgba(255, 255, 255, 0.88);
+      box-shadow: 0 20px 34px rgba(15, 23, 42, 0.12);
+    }
+
+    .hero-panel.small {
+      margin-top: 44px;
+      height: 136px;
+    }
+
+    .hero-panel img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .section {
+      padding: 24px;
+    }
+
+    .section-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+
+    .section-head h2 {
+      font-size: 18px;
+      letter-spacing: -0.2px;
+    }
+
+    .section-head p {
+      margin-top: 4px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .benefit-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .benefit-card {
+      padding: 18px;
+      border-radius: 20px;
+      border: 1px solid var(--border);
+      background: #fff;
+    }
+
+    .benefit-icon {
+      width: 42px;
+      height: 42px;
+      border-radius: 14px;
+      display: grid;
+      place-items: center;
+      color: var(--primary);
+      background: rgba(91, 108, 255, 0.09);
+      font-size: 18px;
+    }
+
+    .benefit-card h3 {
+      margin-top: 16px;
+      font-size: 16px;
+    }
+
+    .benefit-card p {
+      margin-top: 8px;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.7;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .stat-card {
+      padding: 16px;
+      border-radius: 20px;
+      border: 1px solid var(--border);
+      background: #fff;
+    }
+
+    .stat-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .stat-value {
+      margin-top: 16px;
+      font-size: 36px;
+      line-height: 1;
+      letter-spacing: -0.04em;
+      color: #0f172a;
+      font-weight: 900;
+    }
+
+    .stat-note {
+      margin-top: 10px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .plan-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .plan-table th,
+    .plan-table td {
+      text-align: left;
+      padding: 15px 0;
+      border-bottom: 1px solid var(--line);
+      font-size: 13px;
+    }
+
+    .plan-table th {
+      color: var(--muted);
+      font-weight: 700;
+    }
+
+    .plan-table td strong {
+      color: #0f172a;
+    }
+
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      height: 28px;
+      padding: 0 10px;
+      border-radius: 999px;
+      background: #eefcf6;
+      color: var(--success);
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .right-card {
+      padding: 20px;
+      border-radius: 24px;
+    }
+
+    .right-card h3 {
+      font-size: 15px;
+      margin-bottom: 14px;
+    }
+
+    .right-cover {
+      height: 156px;
+      overflow: hidden;
+      border-radius: 18px;
+      margin-bottom: 14px;
+    }
+
+    .right-cover img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .summary-list {
+      display: grid;
+      gap: 10px;
+    }
+
+    .summary-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .summary-row strong {
+      color: #0f172a;
+      text-align: right;
+    }
+
+    .timeline {
+      display: grid;
+      gap: 12px;
+    }
+
+    .timeline-item {
+      display: grid;
+      grid-template-columns: 64px minmax(0, 1fr);
+      gap: 12px;
+      align-items: start;
+    }
+
+    .timeline-time {
+      color: var(--light);
+      font-size: 12px;
+      padding-top: 2px;
+    }
+
+    .timeline-card {
+      padding: 14px;
+      border-radius: 18px;
+      border: 1px solid var(--border);
+      background: #fff;
+    }
+
+    .timeline-card strong {
+      display: block;
+      font-size: 14px;
+      color: #0f172a;
+    }
+
+    .timeline-card p {
+      margin-top: 6px;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.7;
+    }
+
+    .assist-list {
+      display: grid;
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    .assist-item {
+      padding: 12px 14px;
+      border-radius: 16px;
+      background: #f8faff;
+      border: 1px solid var(--border);
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.7;
+    }
+
+    @media (max-width: 1280px) {
+      .layout {
+        grid-template-columns: 1fr;
+      }
+
+      .benefit-grid,
+      .stats-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+  </style>
+  <link rel="stylesheet" href="../assets/css/common.css" />
+  <link rel="stylesheet" href="../assets/css/workspace-shell.css" />
+</head>
+<body>
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="brand-logo">AI</div>
+      <div>
+        <strong>AI 电商多模态设计平台</strong>
+        <span>商用素材工作台</span>
+      </div>
+    </div>
+
+    <nav class="nav">
+      <div class="nav-title">工作区</div>
+      <a class="nav-item" href="dashboard.html"><span class="nav-icon">⌂</span>控制台</a>
+      <a class="nav-item" href="scene-task.html"><span class="nav-icon">✦</span>场景化任务</a>
+      <a class="nav-item" href="material-library.html"><span class="nav-icon">▧</span>素材库</a>
+      <a class="nav-item" href="assistant.html"><span class="nav-icon">⌁</span>智能助手</a>
+      <a class="nav-item" href="lora-assets.html"><span class="nav-icon">◇</span>LoRA 资产</a>
+      <a class="nav-item" href="api-control.html"><span class="nav-icon">⌘</span>API 控制台</a>
+    </nav>
+
+    <div class="sidebar-bottom">
+      <nav class="nav">
+        <div class="nav-title">账户</div>
+        <a class="nav-item active" href="member-center.html"><span class="nav-icon">★</span>会员中心</a>
+        <a class="nav-item" href="settings.html"><span class="nav-icon">⚙</span>设置</a>
+        <a class="nav-item" href="marketing.html"><span class="nav-icon">?</span>帮助中心</a>
+      </nav>
+
+      <div class="mini-plan">
+        <strong>专业版套餐</strong>
+        <div class="mini-bar"><span></span></div>
+        <p>本月已用 3,420 点，剩余 6,580 点，可继续用于图像生成、素材下载和 LoRA 训练。</p>
+      </div>
+    </div>
+  </aside>
+
+  <header class="topbar">
+    <div class="crumb">
+      <span>工作台 / 账户中心</span>
+      <strong>会员中心</strong>
+    </div>
+
+    <label class="search">
+      <span>⌕</span>
+      <input type="text" placeholder="搜索套餐、订单、发票、权益" />
+    </label>
+
+    <div class="top-actions">
+      <div class="quota-pill">专业版 · 剩余额度 6,580 点</div>
+      <button class="icon-btn" title="通知">◔</button>
+      <button class="create-btn">升级套餐</button>
+      <div class="avatar">
+        <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=120&q=80" alt="用户头像" />
+      </div>
+    </div>
+  </header>
+
+  <main class="main">
+    <div class="layout">
+      <div class="left">
+        <section class="card hero">
+          <div>
+            <div class="tag">会员方案与订阅管理</div>
+            <h1>统一管理套餐、权益、续费与商用授权</h1>
+            <p>参考设计类 SaaS 的常见做法，会员中心聚焦在套餐状态、可用额度、团队协作权益、订单与发票管理，让用户一眼看懂自己当前能做什么、还差什么。</p>
+            <div class="hero-actions">
+              <button class="primary-btn">升级到企业版</button>
+              <button class="secondary-btn">管理订阅</button>
+            </div>
+          </div>
+
+          <div class="hero-visual">
+            <div class="hero-panel">
+              <img src="https://images.unsplash.com/photo-1520607162513-77705c0f0d4a?auto=format&fit=crop&w=600&q=80" alt="会员权益展示" />
+            </div>
+            <div class="hero-panel small">
+              <img src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=420&q=80" alt="团队协作展示" />
+            </div>
+          </div>
+        </section>
+
+        <section class="card section">
+          <div class="section-head">
+            <div>
+              <h2>当前套餐概览</h2>
+              <p>突出额度、授权、团队协作和商用权益，是设计工具平台最核心的一屏信息。</p>
+            </div>
+          </div>
+
+          <div class="stats-grid">
+            <article class="stat-card">
+              <div class="stat-top"><span>当前套餐</span><span>SVIP</span></div>
+              <div class="stat-value">专业版</div>
+              <div class="stat-note">支持场景生成、智能助手、LoRA 资产复用</div>
+            </article>
+            <article class="stat-card">
+              <div class="stat-top"><span>月度额度</span><span>可累加</span></div>
+              <div class="stat-value">10,000</div>
+              <div class="stat-note">当前剩余 6,580 点</div>
+            </article>
+            <article class="stat-card">
+              <div class="stat-top"><span>团队席位</span><span>可扩容</span></div>
+              <div class="stat-value">5</div>
+              <div class="stat-note">当前已使用 3 个席位</div>
+            </article>
+            <article class="stat-card">
+              <div class="stat-top"><span>商用授权</span><span>长期有效</span></div>
+              <div class="stat-value">已开通</div>
+              <div class="stat-note">支持平台内生成素材的商用落地</div>
+            </article>
+          </div>
+        </section>
+
+        <section class="card section">
+          <div class="section-head">
+            <div>
+              <h2>会员权益</h2>
+              <p>借鉴设计工具和创作平台常见的权益结构，分成生成、素材、协作、授权四个层面。</p>
+            </div>
+          </div>
+
+          <div class="benefit-grid">
+            <article class="benefit-card">
+              <div class="benefit-icon">✦</div>
+              <h3>高额度创作</h3>
+              <p>优先使用高质量生成通道，支持多任务并行与批量结果导出。</p>
+            </article>
+            <article class="benefit-card">
+              <div class="benefit-icon">▧</div>
+              <h3>高级素材授权</h3>
+              <p>解锁更多模板、品牌风格包和团队沉淀资产的可复用能力。</p>
+            </article>
+            <article class="benefit-card">
+              <div class="benefit-icon">⌘</div>
+              <h3>团队协作位</h3>
+              <p>可邀请设计、运营、投放同学共享素材库、场景模板和任务结果。</p>
+            </article>
+            <article class="benefit-card">
+              <div class="benefit-icon">★</div>
+              <h3>商用与发票</h3>
+              <p>支持企业订阅、商用授权说明、统一发票抬头和历史账单下载。</p>
+            </article>
+          </div>
+        </section>
+
+        <section class="card section">
+          <div class="section-head">
+            <div>
+              <h2>订阅与账单</h2>
+              <p>保持后台产品的可信感，必须让用户能快速看到扣费、续费和发票状态。</p>
+            </div>
+            <button class="secondary-btn">下载发票</button>
+          </div>
+
+          <table class="plan-table">
+            <thead>
+              <tr>
+                <th>订阅项目</th>
+                <th>周期</th>
+                <th>金额</th>
+                <th>状态</th>
+                <th>下次扣费</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>专业版会员</strong></td>
+                <td>月付</td>
+                <td>¥299 / 月</td>
+                <td><span class="status-badge">正常生效</span></td>
+                <td>2026-06-05</td>
+              </tr>
+              <tr>
+                <td><strong>团队协作席位</strong></td>
+                <td>月付</td>
+                <td>¥99 / 席位</td>
+                <td><span class="status-badge">正常生效</span></td>
+                <td>2026-06-05</td>
+              </tr>
+              <tr>
+                <td><strong>LoRA 训练扩容包</strong></td>
+                <td>按次</td>
+                <td>¥199 / 次</td>
+                <td><span class="status-badge">已购买</span></td>
+                <td>-</td>
+              </tr>
+            </tbody>
+          </table>
+        </section>
+
+        <section class="card section">
+          <div class="section-head">
+            <div>
+              <h2>最近会员操作</h2>
+              <p>帮助用户确认升级、续费、发票申请和席位变更是否已成功。</p>
+            </div>
+          </div>
+
+          <div class="timeline">
+            <div class="timeline-item">
+              <div class="timeline-time">今天 11:24</div>
+              <div class="timeline-card">
+                <strong>已续费专业版会员</strong>
+                <p>续费周期为 2026-05-05 至 2026-06-05，续费后额度已自动补充到当月账户。</p>
+              </div>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-time">昨天 16:08</div>
+              <div class="timeline-card">
+                <strong>新增 1 个团队席位</strong>
+                <p>用于营销团队协作，已同步到素材库、任务结果和 LoRA 资产管理权限。</p>
+              </div>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-time">05-01</div>
+              <div class="timeline-card">
+                <strong>申请电子发票成功</strong>
+                <p>发票抬头为“示例科技有限公司”，可在账单中心重复下载。</p>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <aside class="right">
+        <section class="card right-card">
+          <h3>当前方案</h3>
+          <div class="right-cover">
+            <img src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=640&q=80" alt="当前会员方案" />
+          </div>
+          <div class="summary-list">
+            <div class="summary-row"><span>套餐名称</span><strong>专业版</strong></div>
+            <div class="summary-row"><span>商用授权</span><strong>已开通</strong></div>
+            <div class="summary-row"><span>可用席位</span><strong>5 个</strong></div>
+            <div class="summary-row"><span>本月额度</span><strong>10,000 点</strong></div>
+            <div class="summary-row"><span>到期时间</span><strong>2026-06-05</strong></div>
+          </div>
+          <div style="margin-top:14px;">
+            <button class="full-btn">立即升级企业版</button>
+          </div>
+        </section>
+
+        <section class="card right-card">
+          <h3>企业权益建议</h3>
+          <div class="assist-list">
+            <div class="assist-item">如果你当前有设计、运营、投放多角色协作需求，建议升级团队版以统一素材沉淀和审批出口。</div>
+            <div class="assist-item">如果你每月 LoRA 训练和风格资产沉淀频率较高，可购买训练扩容包，减少临时额度不足。</div>
+            <div class="assist-item">如果有品牌侧对商用授权和交付规范要求，建议统一在会员中心归档授权说明与账单。</div>
+          </div>
+        </section>
+      </aside>
+    </div>
+  </main>
+
+  <script src="../assets/js/mock.js"></script>
+  <script src="../assets/js/app.js"></script>
+</body>
+</html>
